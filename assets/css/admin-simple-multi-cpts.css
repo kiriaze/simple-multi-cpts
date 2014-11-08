@@ -1,0 +1,20 @@
+#adminmenu #menu-posts-simple-multi-cpts div.wp-menu-image{
+    /*background:transparent url(../images/simple-multi-cpts-icon.png) no-repeat 6px -17px !important;*/
+    background-position: -300px -33px;
+}
+#adminmenu #menu-posts-simple-multi-cpts:hover div.wp-menu-image,
+#adminmenu #menu-posts-simple-multi-cpts.wp-has-current-submenu div.wp-menu-image {
+    /*background:transparent url(../images/simple-multi-cpts-icon.png) no-repeat 6px 7px !important;*/
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 1.5) {
+    #adminmenu #menu-posts-simple-multi-cpts div.wp-menu-image{
+        /*background:transparent url(../images/simple-multi-cpts-icon@2x.png) no-repeat 6px -17px !important;*/
+        /*background-size: 16px 40px!important;*/
+    }
+    #adminmenu #menu-posts-simple-multi-cpts:hover div.wp-menu-image,
+    #adminmenu #menu-posts-simple-multi-cpts.wp-has-current-submenu div.wp-menu-image {
+        /*background:transparent url(../images/simple-multi-cpts-icon@2x.png) no-repeat 6px 7px !important;*/
+        /*background-size: 16px 40px!important;*/
+    }
+}
