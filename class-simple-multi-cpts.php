@@ -198,7 +198,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		        );
 
 				// conditional check if custom tax set
-				if ( isset($cpt_tax[$count]) ) :
+				if ( isset($cpt_tax[$count]) && !empty($cpt_tax[$count]) ) :
 					$custom_tax[] = array(
 						preg_replace("/\W/", "_", strtolower($cpt_tax[$count]) )    => array(
 								'object_type'                   => $cpt_slug[$count],
