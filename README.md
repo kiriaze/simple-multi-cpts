@@ -20,7 +20,7 @@ add_filter( 'simple_multi_cpts_plugin_init', 'simple_child_cpts' );
 function simple_child_cpts() {
 
     global $child_cpts;
-	
+
     // Required
     $cpt_name = array(
         'Agency',
@@ -57,4 +57,4 @@ function simple_child_cpts() {
 ```
 
 ### Beer?
-Beer me if ya want ;)
+[Beer me if ya want ;)](https://plasso.co/ckiriaze@gmail.com)
