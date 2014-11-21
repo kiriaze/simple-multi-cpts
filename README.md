@@ -2,7 +2,7 @@ Simple Multi Custom Post Types
 ===========
 
 #### Update!
-Now allows for an array of multiple taxonomies to be passed to each cpt. Also the ability to filter/sort them, as well as post type term count.
+Now allows for an array of multiple taxonomies to be passed to each cpt. Also the ability to filter/sort them, as well as post type term count. Also added $hide[] to hide taxs from backends table row header and filter/sort dropdowns.
 
 ### What?
 A plugin that can handle multiple custom post types at once, requires atleast the singular and plural name of each cpt you would like to add, and optionally a custom taxonomy and slug rewrite.
@@ -45,11 +45,22 @@ function simple_child_cpts() {
         array('Type', 'Url', 'Skills')
     );
 
-	// Optional
+    // Optional
     $rewriteUrl = array(
         'Agencies',
         '',
         'Work'
+    );
+
+    // Optional - set to true to hide from backend
+    $hide = array(
+        '',
+        true,
+        array(
+            '',
+            true,
+            ''
+        )
     );
 
     $child_cpts = array($cpt_name, $cpt_plural, $cpt_tax, $rewriteUrl);
