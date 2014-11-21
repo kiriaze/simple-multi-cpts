@@ -46,16 +46,16 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	        add_action( 'init', array( &$this, 'cpt_init' ) );
 
 			//  Columns
-			// $count = 0;
-	  //   	foreach ( $cpt_slug as $cpt ) {
-			// 	add_filter( 'manage_edit-'.$cpt.'_columns', array( &$this, 'add_cpt_columns') );
-			// 	add_action( 'manage_'.$cpt.'_posts_custom_column', array( &$this, 'display_cpt_columns' ) );
-			// 	add_filter( 'manage_edit-'.$cpt.'_sortable_columns', array( &$this, 'cpt_column_register_sortable' ) );
-			// 	$count++;
-			// }
+			$count = 0;
+	    	foreach ( $cpt_slug as $cpt ) {
+				add_filter( 'manage_edit-'.$cpt.'_columns', array( &$this, 'add_cpt_columns') );
+				add_action( 'manage_'.$cpt.'_posts_custom_column', array( &$this, 'display_cpt_columns' ) );
+				add_filter( 'manage_edit-'.$cpt.'_sortable_columns', array( &$this, 'cpt_column_register_sortable' ) );
+				$count++;
+			}
 
 			//  Tax Filters
-			// add_action( 'restrict_manage_posts', array( &$this, 'add_taxonomy_filters' ) );
+			add_action( 'restrict_manage_posts', array( &$this, 'add_taxonomy_filters' ) );
 
 			//  Add Dashboard Counter
 			add_action( 'right_now_content_table_end', array( &$this, 'add_cpt_counts' ) );
@@ -199,25 +199,71 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 				// conditional check if custom tax set
 				if ( isset($cpt_tax[$count]) && !empty($cpt_tax[$count]) ) :
-					$custom_tax[] = array(
-						preg_replace("/\W/", "_", strtolower($cpt_tax[$count]) )    => array(
-								'object_type'                   => $cpt_slug[$count],
-								'label'                         => $cpt_tax[$count],
-								'labels'                        => array(
-								'name'                      => $cpt_tax[$count],
-								'singluar_name'             => substr_replace( $cpt_tax[$count].'s', "", -1 ),
-							),
-							'public'                        => true,
-							'show_in_nav_menus'             => false,
-							'show_ui'                       => true,
-							'show_tagcloud'                 => false,
-							'hierarchical'                  => true,
-							'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax[$count]) ) ),
-							'link_to_post_type'             => false,
-							'post_type_link'                => null,
-							'has_archive'                   => true
-						)
-					);
+
+
+					// // sp($cpt_tax);
+					// if ( is_array($cpt_tax) ) {
+					// 	foreach ($cpt_tax as $key => $value) {
+					// 		// sp($value);
+					// 		if ( !is_array($value) ) {
+					// 			sp($value);
+					// 		} else {
+					// 			foreach ($value as $key => $value) {
+					// 				sp($value);
+					// 			}
+					// 		}
+					// 	}
+					// }
+
+					if ( !is_array( $cpt_tax[$count] ) ) {
+						// sp($cpt_tax);
+						$label = preg_replace("/\W/", "_", strtolower($cpt_tax[$count]) );
+						$custom_tax[] = array(
+							$label    => array(
+									'object_type'                   => $cpt_slug[$count],
+									'label'                         => $cpt_tax[$count],
+									'labels'                        => array(
+									'name'                      => $cpt_tax[$count],
+									'singluar_name'             => substr_replace( $cpt_tax[$count].'s', "", -1 ),
+								),
+								'public'                        => true,
+								'show_in_nav_menus'             => false,
+								'show_ui'                       => true,
+								'show_tagcloud'                 => false,
+								'hierarchical'                  => true,
+								'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax[$count]) ) ),
+								'link_to_post_type'             => false,
+								'post_type_link'                => null,
+								'has_archive'                   => true
+							)
+						);
+					} else {
+						foreach ( $cpt_tax[$count] as $cpt_tax ) {
+							$label = preg_replace("/\W/", "_", strtolower($cpt_tax) );
+							// sp($cpt_tax);
+							// sp($label);
+							$custom_tax[] = array(
+								$label    => array(
+										'object_type'                   => $cpt_slug[$count],
+										'label'                         => $cpt_tax,
+										'labels'                        => array(
+										'name'                      => $cpt_tax,
+										'singluar_name'             => substr_replace( $cpt_tax.'s', "", -1 ),
+									),
+									'public'                        => true,
+									'show_in_nav_menus'             => false,
+									'show_ui'                       => true,
+									'show_tagcloud'                 => false,
+									'hierarchical'                  => true,
+									'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax) ) ),
+									'link_to_post_type'             => false,
+									'post_type_link'                => null,
+									'has_archive'                   => true
+								)
+							);
+						}
+					}
+
 
 					$taxonomies = array_merge($taxonomies, $custom_tax);
 
@@ -264,83 +310,116 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 	    }
 
-
-
-
-
-
-
-
-
 	    //  Add Columns
 	    function add_cpt_columns( $columns ) {
 
-	    	// $count			= 0;
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-	    	// foreach ( $cpt_slug as $cpt ) {
+	        $columns = array(
+				'cb'                         => '<input type="checkbox" />',
+				'title'                      => __( 'Name' ),
+				'thumbnail'                  => __( 'Thumbnail' ),
+	        );
 
-		        $columns = array(
-		            'cb'            => '<input type="checkbox" />',
-		            'title'         => __( 'Name' ),
-		            'thumbnail'     => __( 'Thumbnail' ),
-		            $cpt_slug[0] . '_categories'    => __( $cpt_name[0] . ' Categories' ),
-		            $cpt_slug[0] . '_tags'          => __( $cpt_name[0] . ' Tags' ),
-		            'date'          => __( 'Date' )
-		        );
+			$columns[ get_post_type() . '_categories'] = __( ucfirst( get_post_type() . ' Categories') );
+			$columns[ get_post_type() . '_tags']       = __( ucfirst( get_post_type() . ' Tags') );
 
-		        if( $cpt_tax[0] ) :
-		            array_push($columns, $cpt_tax[0]);
-		        endif;
+			$check = array();
 
-		        return $columns;
+			foreach ( $cpt_slug as $key => $value ) {
+				$check[] = $value;
+			}
 
-		        // $count++;
+			foreach ( $cpt_tax as $key => $value ) {
 
-	    	// }
+				if ( $key == array_search(get_post_type(), $check) ) {
+
+					$columns[$value] = __( ucfirst($cpt_tax[array_search(get_post_type(), $check)]) );
+
+					if ( is_array($cpt_tax) ) {
+						foreach ( $cpt_tax as $key => $value ) {
+							if ( is_array($value) ) {
+								foreach ($value as $key => $value) {
+									// sp($value);
+									$columns[$value] = __( ucfirst($value) );
+								}
+							}
+						}
+					}
+
+				}
+
+			}
+
+			$columns['date']       = __( 'Date' );
+
+	        return $columns;
+
 	    }
 
-	    //  Add thumbnail to column
+	    //  Add data to column
 	    function display_cpt_columns( $column ) {
 
 	        global $post;
 
-	        // $count			= 0;
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-	        // foreach ( $cpt_slug as $cpt ) {
+	        if ( $column == 'thumbnail' ) {
+				$thumb = get_the_post_thumbnail( $post->ID, array(35, 35) );
+				echo $thumb;
+	        }
 
-		        switch ( $column ) {
+	        foreach ( $cpt_slug as $cpt_slug ) {
 
-		            case 'thumbnail':
-		                $thumb = get_the_post_thumbnail( $post->ID, array(35, 35) );
-		                echo $thumb;
-		                break;
+	        	if ( $column == $cpt_slug . '_categories' ) {
+					$args = array(
+						'taxonomy' => $cpt_slug . '_category_labels',
+						'postID'   => $post->ID
+					);
+					do_action('simple_list_terms', $args);
+	        	}
 
-		            case $cpt_tax[0]:
-		                do_action('simple_list_terms', $cpt_tax[0]);
-		            break;
+				if ( $column == $cpt_slug . '_tags' ) {
+					$args = array(
+						'taxonomy' => $cpt_slug . '_tag_labels',
+						'postID'   => $post->ID
+					);
+					do_action('simple_list_terms', $args);
+				}
 
-		            case $cpt_slug[0] . '_categories':
-		                do_action('simple_list_terms', $cpt_slug[0] . '_category_labels');
-		            break;
 
-		            case $cpt_slug[0] . '_tags':
-		                do_action('simple_list_terms', $cpt_slug[0] . '_tag_labels');
-		            break;
+	        }
 
-		            // Just break out of the switch statement for everything else.
-		            default :
-		                break;
-		        }
-
-		        // $count++;
-
-		    // }
+			if ( is_array($cpt_tax) ) {
+				// sp($cpt_tax);
+				foreach ( $cpt_tax as $key => $value ) {
+					if ( !is_array($value) ) {
+						// sp($value);
+						if ( $column == $value ) :
+							$args = array(
+								'taxonomy' => strtolower($value),
+								'postID'   => $post->ID
+							);
+							do_action('simple_list_terms', $args);
+						endif;
+					} else {
+						foreach ($value as $key => $value) {
+							// sp($value);
+							if ( $column == $value ) :
+								$args = array(
+									'taxonomy' => strtolower($value),
+									'postID'   => $post->ID
+								);
+								do_action('simple_list_terms', $args);
+							endif;
+						}
+					}
+				}
+			}
 
 	    }
 
@@ -351,13 +430,26 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-	        $columns['thumbnail']   					= 'thumbnail';
-	        $columns[$cpt_slug[0] . '_categories']  	= $cpt_slug[0] . '_categories';
-	        $columns[$cpt_slug[0] . '_tags']        	= $cpt_slug[0] . '_tags';
+	        foreach ( $cpt_slug as $cpt_slug ) {
+		        $columns[$cpt_slug . '_categories']  	= $cpt_slug . '_categories';
+		        $columns[$cpt_slug . '_tags']        	= $cpt_slug . '_tags';
+	        }
 
-	        if ( $cpt_tax[0] ) :
-	            array_push($columns, $cpt_tax[0]);
-	        endif;
+			if ( is_array($cpt_tax) ) {
+				foreach ($cpt_tax as $key => $value) {
+					if ( !is_array($value) ) {
+						// sp($value);
+						$columns[$value] = __( ucfirst($value) );
+					} else {
+						foreach ( $value as $key => $value ) {
+							// sp($value);
+							$columns[$value] = __( ucfirst($value) );
+						}
+					}
+				}
+			}
+
+	        $columns['thumbnail']   					= 'thumbnail';
 
 	        return $columns;
 
@@ -366,57 +458,107 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	    //  Add Tax Filter Dropdowns to the Admin - http://pippinsplugins.com
 	    function add_taxonomy_filters() {
 
-	        global $typenow;
+	        global $typenow, $taxonomies;
 
 	        $count			= 0;
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-	    	foreach ( $cpt_slug as $cpt ) {
+			// $taxonomies = [];
 
-		        //  Use tax name or slug
-		        $taxonomies = array( $cpt . '_category_labels', $cpt . '_tag_labels', $cpt_tax );
+			$check = array();
 
-		        if ( $cpt_tax ) :
-		            array_push($taxonomies, $cpt_tax);
-		        endif;
+			foreach ( $cpt_slug as $key => $value ) {
+				$check[] = $value;
+			}
 
-		        //  Post type for filter
-		        if ( $typenow == $cpt ) {
+			foreach ( $cpt_tax as $key => $value ) {
 
-		            foreach ( $taxonomies as $tax_slug ) {
+				if ( isset( $check[$key] ) ) {
 
-		            	if ( !empty($tax_slug) ) :
-			                $current_tax_slug = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : false;
-			                $tax_obj = get_taxonomy( $tax_slug );
-			                $tax_name = $tax_obj->labels->name;
-			                $terms = get_terms($tax_slug, 'hide_empty=0');
-			                if ( count( $terms ) > 0) {
-			                    echo "<select name='$tax_slug' id='$tax_slug' class='postform'>";
-			                    echo "<option value=''>$tax_name</option>";
-			                    foreach ( $terms as $term ) {
-			                        echo '<option value=' . $term->slug, $current_tax_slug == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
-			                    }
-			                    echo "</select>";
-			                }
-			            endif;
-		            }
+					// var_dump($key);
+					// var_dump($value);
+					// var_dump($check[$key]);
 
-		        }
+					if ( $check[$key] == get_post_type() ) {
+						// var_dump($value);
+						// Use tax name or slug
+		        		$taxonomies[] = $check[$key] . '_category_labels';
+		        		$taxonomies[] = $check[$key] . '_tag_labels';
+						if ( is_array($value) ) {
+							foreach ($value as $key => $value) {
+								if ( !is_array($value) ) {
+									// sp($value);
+									$taxonomies[] = preg_replace("/\W/", "_", strtolower($value) );
+								} else {
+									foreach ($value as $key => $value) {
+										// sp($value);
+										$taxonomies[] = preg_replace("/\W/", "_", strtolower($value) );
+									}
+								}
+							}
+						}
+					}
 
-		        $count++;
+				}
+
+			}
+
+			foreach ( $taxonomies as $tax ) {
+
+				if ( !empty($tax) ) :
+
+			        $current_tax = isset( $tax ) ? $tax : false;
+
+					if ( $tax ) {
+						if ( is_array($tax) ) {
+							$tax = array_keys($tax);
+							foreach ( $tax as $tax ) {
+								$tax_obj = get_taxonomy( strtolower($tax) );
+							}
+						} else {
+							$tax_obj = get_taxonomy( strtolower($tax) );
+						}
+					}
+
+			        if ( is_array($tax_obj) ) {
+						foreach ($tax_obj as $key => $value) {
+							if ( !is_array($tax_obj) ) {
+								// sp($value);
+								$tax_name = $value;
+							} else {
+								foreach ($tax_obj as $key => $value) {
+									// sp($value);
+									$tax_name = $value;
+								}
+							}
+						}
+					} else {
+			        	$tax_name = $tax_obj->labels->name;
+					}
+
+					$termArgs = array(
+						'hide_empty' => 0,
+						'post_type' => get_post_type(),
+					);
+
+					$terms = get_terms($tax, $termArgs);
+
+					if ( count( $terms ) > 0 ) {
+					    echo "<select name='$tax' id='$tax' class='postform'>";
+					    echo "<option value=''>$tax_name</option>";
+					    foreach ( $terms as $term ) {
+					        echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
+					    }
+					    echo "</select>";
+					}
+
+			    endif;
 
 		    }
 
 	    }
-
-
-
-
-
-
-
 
 	}
 
