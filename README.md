@@ -1,6 +1,9 @@
 Simple Multi Custom Post Types
 ===========
 
+#### Update!
+Now allows for an array of multiple taxonomies to be passed to each cpt. Also the ability to filter/sort them, as well as post type term count.
+
 ### What?
 A plugin that can handle multiple custom post types at once, requires atleast the singular and plural name of each cpt you would like to add, and optionally a custom taxonomy and slug rewrite.
 
@@ -12,7 +15,7 @@ Came across a project requiring a ridiculous amount of custom post types, and di
 ### How?
 1. Download/Clone, install and activate plugin.
 2. Place hook into theme functions. ( Preferably into abstracted module, look @ simple. ) Note: Capitalise first letter.
-3. Notice how not every post type needs a tax or rewrite, however since this plugin works in array association, you will need to add an empty string for that relation.
+3. Notice how not every post type needs a tax or rewrite, however since this plugin works in array association, you will need to add an empty string for that relation. Allows for an array of multiple taxonomies to be passed to each cpt.
 
 ```
 // hook into simple multi cpts
@@ -39,7 +42,7 @@ function simple_child_cpts() {
     $cpt_tax = array(
         'Locations',
         '',
-        'Type'
+        array('Type', 'Url', 'Skills')
     );
 
 	// Optional
