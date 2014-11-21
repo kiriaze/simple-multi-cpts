@@ -21,17 +21,18 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	    function __construct() {
 
 	        //  Grab globals passed from init
-	        global $cpt_slug, $cpt_name, $cpt_plural, $cpt_tax, $heirarchial, $has_archive, $rewriteUrl, $defaultStyles;
+	        global $cpt_slug, $cpt_name, $cpt_plural, $cpt_tax, $heirarchial, $has_archive, $rewriteUrl, $hide, $defaultStyles;
 
 	        //  Set them relative to function
-	        $this->cpt_slug = $cpt_slug;
-	        $this->cpt_name = $cpt_name;
-	        $this->cpt_plural = $cpt_plural;
-	        $this->cpt_tax = $cpt_tax;
-	        $this->heirarchial = $heirarchial;
-	        $this->has_archive = $has_archive;
-	        $this->rewrite = $rewriteUrl;
-	        $this->defaultStyles = $defaultStyles;
+			$this->cpt_slug      = $cpt_slug;
+			$this->cpt_name      = $cpt_name;
+			$this->cpt_plural    = $cpt_plural;
+			$this->cpt_tax       = $cpt_tax;
+			$this->heirarchial   = $heirarchial;
+			$this->has_archive   = $has_archive;
+			$this->rewrite       = $rewriteUrl;
+			$this->hide          = $hide;
+			$this->defaultStyles = $defaultStyles;
 
 	        //  Plugin Activation
 	        register_activation_hook( __FILE__, array( &$this, 'plugin_activation' ) );
@@ -316,6 +317,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
+			$hide			= $this->hide;
 
 	        $columns = array(
 				'cb'                         => '<input type="checkbox" />',
@@ -338,14 +340,32 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 					$columns[$value] = __( ucfirst($cpt_tax[array_search(get_post_type(), $check)]) );
 
+					foreach ( $hide as $key => $value ) {
+						if ( $value == 1 ) {
+							// sp($cpt_tax[$key]);
+							unset($columns[$cpt_tax[$key]]);
+						}
+					}
+
 					if ( is_array($cpt_tax) ) {
+
 						foreach ( $cpt_tax as $key => $value ) {
-							if ( is_array($value) ) {
-								foreach ($value as $key => $value) {
-									// sp($value);
-									$columns[$value] = __( ucfirst($value) );
+
+							foreach ( $value as $key => $value2 ) {
+
+								// set em all
+								$columns[$value2] = __( ucfirst($value2) );
+
+								// unset ones from hide array
+								foreach ( $hide[$key] as $key2 => $value ) {
+									if ( $value == 1 ) {
+										sp($cpt_tax[$key][$key2]);
+										unset($columns[$cpt_tax[$key][$key2]]);
+									}
 								}
+
 							}
+
 						}
 					}
 
@@ -464,6 +484,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
+			$hide			= $this->hide;
 
 			// $taxonomies = [];
 
@@ -471,6 +492,18 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			foreach ( $cpt_slug as $key => $value ) {
 				$check[] = $value;
+			}
+
+			foreach ( $hide as $key => $value ) {
+				if ( is_array($value) ) {
+					foreach ( $value as $key2 => $value2 ) {
+						if ( $value2 == 1 ) {
+							// sp($cpt_tax[$key][$key2]);
+							unset($cpt_tax[$key][$key2]);
+							// sp($cpt_tax);
+						}
+					}
+				}
 			}
 
 			foreach ( $cpt_tax as $key => $value ) {

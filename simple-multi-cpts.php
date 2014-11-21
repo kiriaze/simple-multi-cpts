@@ -39,7 +39,7 @@ if ( ! defined( 'WPINC' ) ) {
 add_action('after_setup_theme', 'simple_multi_cpts_plugin_init', 12);
 function simple_multi_cpts_plugin_init(){
 
-    global $plugin_name, $prefix, $plugin_url, $plugin_path, $plugin_basename, $cpt_slug, $cpt_name, $cpt_plural, $cpt_tax, $heirarchial, $has_archive, $rewriteUrl, $defaultStyles, $child_cpts;
+    global $plugin_name, $prefix, $plugin_url, $plugin_path, $plugin_basename, $cpt_slug, $cpt_name, $cpt_plural, $cpt_tax, $heirarchial, $has_archive, $rewriteUrl, $hide, $defaultStyles, $child_cpts;
 
     //  Define Globals
     $plugin_name        =   'Simple Multi CPTS';   // change this - always prefix e.g. Simple Multi CPTS
@@ -64,6 +64,11 @@ function simple_multi_cpts_plugin_init(){
                                 // '',
                             );
 
+    // Optional: post type columns to hide - all default to true
+    $hide               =   array(
+                                // '',
+                            );
+
 
     // allow filtering in child themes
     $cpt_name   = isset(apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0]) ? apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] : [];
@@ -71,11 +76,13 @@ function simple_multi_cpts_plugin_init(){
     $cpt_tax    = isset(apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2]) ? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] : [];
     $rewriteUrl = isset(apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3]) ? apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] : [];
     $rewriteUrl = array_map('strtolower', $rewriteUrl);
+    $hide       = isset(apply_filters('simple_multi_cpts_plugin_init', $hide)[4]) ? apply_filters('simple_multi_cpts_plugin_init', $hide)[4] : [];
 
     // sp($cpt_name);
     // sp($cpt_plural);
     // sp($cpt_tax);
     // sp($rewriteUrl);
+    // sp($hide);
 
     $plugin_name        =   preg_replace( "/\W/", "-", strtolower($plugin_name) );
     $prefix             =   preg_replace( "/\W/", "_", strtolower($plugin_name) );
