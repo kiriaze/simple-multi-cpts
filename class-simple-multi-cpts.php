@@ -115,6 +115,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$heirarchial	= $this->heirarchial;
 			$has_archive	= $this->has_archive;
 			$cpt_tax		= $this->cpt_tax;
+			$hide			= $this->hide;
 			$post_types		= '';
 			$taxonomies		= '';
 
@@ -122,7 +123,165 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$rewrite		= $this->rewrite;
 			$fields			= array( 'slug' );
 
-			foreach ( $cpt_slug as $cpt ) {
+			// foreach ( $cpt_slug as $cpt ) {
+
+			// 	if ( isset($rewrite[$count]) ) {
+			// 		$str                		= "$rewrite[$count]";
+			// 		$rewrite[$count]            = ( $rewrite[$count] != 'false' ) ? serialize(array_combine( $fields, explode ( ", ", $str ) )) : 'false';
+			// 		$rewrite[$count] 			= unserialize($rewrite[$count]);
+			// 		// sp($rewrite[$count]);
+			// 	}
+
+			// 	$post_types[] = array(
+			// 		$cpt =>  array(
+		 //                'labels'                    => array(
+		 //                    'name'                      => __( $cpt_plural[$count] ),
+		 //                    'singular_name'             => __( $cpt_name[$count] ),
+		 //                    'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
+		 //                    'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
+		 //                    'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
+		 //                    'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
+		 //                    'view_item'                 => __( 'View ' . $cpt_name[$count] ),
+		 //                    'search_items'              => __( 'Search ' . $cpt_plural[$count] ),
+		 //                    'not_found'                 => __( 'No '. $cpt_plural[$count] . ' found' ),
+		 //                    'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
+		 //                ),
+		 //                'public'                    => true,
+		 //                'supports'                  => array( 'title', 'editor','thumbnail'),
+		 //                'capability_type'           => 'post',
+		 //                'menu_position'             => '15',
+			// 			'hierarchical'              => $heirarchial,
+			// 			'has_archive'               => $has_archive,
+			// 			'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
+			// 			'taxonomies' 				=> array('category', 'post_tag') // this is IMPORTANT
+		 //            ),
+			// 	);
+
+			// 	// taxes
+			// 	global $taxonomies;
+		 //        $taxonomies[] = array(
+
+		 //            $cpt . '_tag_labels'         => array(
+		 //                'object_type'                   => $cpt,
+		 //                'label'                         => $cpt_name[$count]. ' Tags',
+		 //                'labels'                        => array(
+		 //                        'name'                      => $cpt_name[$count]. ' Tags',
+		 //                        'singluar_name'             => substr_replace( $cpt_name[$count]. ' Tags', "", -1 ),
+		 //                    ),
+		 //                'public'                        => true,
+		 //                'show_in_nav_menus'             => false,
+		 //                'show_ui'                       => true,
+		 //                'show_tagcloud'                 => false,
+		 //                'hierarchical'                  => true,
+		 //                'rewrite'                       => array('slug' => $cpt . '_tag'),
+		 //                'link_to_post_type'             => false,
+		 //                'post_type_link'                => null,
+		 //                'has_archive'                   => true
+		 //            ),
+
+		 //            $cpt . '_category_labels'    => array(
+		 //                'object_type'                   => $cpt,
+		 //                'label'                         => $cpt_name[$count]. ' Categories',
+		 //                'labels'                        => array(
+		 //                        'name'                      => $cpt_name[$count]. ' Categories',
+		 //                        'singluar_name'             => substr_replace( $cpt_name[$count]. ' Categories', "", -1 ),
+		 //                    ),
+		 //                'public'                        => true,
+		 //                'show_in_nav_menus'             => false,
+		 //                'show_ui'                       => true,
+		 //                'show_tagcloud'                 => false,
+		 //                'hierarchical'                  => true,
+		 //                'rewrite'                       => array('slug' => $cpt . '_category'),
+		 //                'link_to_post_type'             => false,
+		 //                'post_type_link'                => null,
+		 //                'has_archive'                   => true
+		 //            ),
+
+		 //        );
+
+			// 	// conditional check if custom tax set
+			// 	if ( isset($cpt_tax[$count]) && !empty($cpt_tax[$count]) ) :
+
+			// 		if ( is_array( $cpt_tax ) ) {
+
+			// 			if ( !is_array( $cpt_tax[$count] ) ) {
+
+			// 				$label = preg_replace("/\W/", "_", strtolower($cpt_tax[$count]) );
+			// 				// sp($label);
+
+			// 				$custom_tax[] = array(
+			// 					$label    => array(
+			// 							'object_type'                   => $cpt_slug[$count],
+			// 							'label'                         => $cpt_tax[$count],
+			// 							'labels'                        => array(
+			// 							'name'                      => $cpt_tax[$count],
+			// 							'singluar_name'             => substr_replace( $cpt_tax[$count].'s', "", -1 ),
+			// 						),
+			// 						'public'                        => true,
+			// 						'show_in_nav_menus'             => false,
+			// 						'show_ui'                       => true,
+			// 						'show_tagcloud'                 => false,
+			// 						'hierarchical'                  => true,
+			// 						'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax[$count]) ) ),
+			// 						'link_to_post_type'             => false,
+			// 						'post_type_link'                => null,
+			// 						'has_archive'                   => true
+			// 					)
+			// 				);
+
+			// 			} else {
+
+			// 				foreach ( $cpt_tax[$count] as $cpt_tax ) {
+
+			// 					$label = preg_replace("/\W/", "_", strtolower($cpt_tax) );
+
+			// 					// sp($cpt_tax);
+			// 					// sp($label);
+
+			// 					$custom_tax[] = array(
+			// 						$label    => array(
+			// 								'object_type'                   => $cpt_slug[$count],
+			// 								'label'                         => $cpt_tax,
+			// 								'labels'                        => array(
+			// 								'name'                      => $cpt_tax,
+			// 								'singluar_name'             => substr_replace( $cpt_tax.'s', "", -1 ),
+			// 							),
+			// 							'public'                        => true,
+			// 							'show_in_nav_menus'             => false,
+			// 							'show_ui'                       => true,
+			// 							'show_tagcloud'                 => false,
+			// 							'hierarchical'                  => true,
+			// 							'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax) ) ),
+			// 							'link_to_post_type'             => false,
+			// 							'post_type_link'                => null,
+			// 							'has_archive'                   => true
+			// 						)
+			// 					);
+
+			// 				}
+
+			// 			}
+			// 		}
+
+			// 		$taxonomies = array_merge($taxonomies, $custom_tax);
+
+			// 	endif;
+
+			// 	$count++;
+
+			// }
+
+
+
+
+
+
+
+			$check = array();
+
+			foreach ( $cpt_slug as $key => $value ) {
+
+				$check[] = $value;
 
 				if ( isset($rewrite[$count]) ) {
 					$str                		= "$rewrite[$count]";
@@ -132,147 +291,168 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				}
 
 				$post_types[] = array(
-					$cpt =>  array(
-		                'labels'                    => array(
-		                    'name'                      => __( $cpt_plural[$count] ),
-		                    'singular_name'             => __( $cpt_name[$count] ),
-		                    'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
-		                    'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
-		                    'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
-		                    'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
-		                    'view_item'                 => __( 'View ' . $cpt_name[$count] ),
-		                    'search_items'              => __( 'Search ' . $cpt_plural[$count] ),
-		                    'not_found'                 => __( 'No '. $cpt_plural[$count] . ' found' ),
-		                    'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
-		                ),
-		                'public'                    => true,
-		                'supports'                  => array( 'title', 'editor','thumbnail'),
-		                'capability_type'           => 'post',
-		                'menu_position'             => '15',
+					$value =>  array(
+				        'labels'                    => array(
+				            'name'                      => __( $cpt_plural[$count] ),
+				            'singular_name'             => __( $cpt_name[$count] ),
+				            'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
+				            'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
+				            'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
+				            'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
+				            'view_item'                 => __( 'View ' . $cpt_name[$count] ),
+				            'search_items'              => __( 'Search ' . $cpt_plural[$count] ),
+				            'not_found'                 => __( 'No '. $cpt_plural[$count] . ' found' ),
+				            'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
+				        ),
+				        'public'                    => true,
+				        'supports'                  => array( 'title', 'editor','thumbnail'),
+				        'capability_type'           => 'post',
+				        'menu_position'             => '15',
 						'hierarchical'              => $heirarchial,
 						'has_archive'               => $has_archive,
 						'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
 						'taxonomies' 				=> array('category', 'post_tag') // this is IMPORTANT
-		            ),
+				    ),
 				);
 
-				// taxes
-				global $taxonomies;
-		        $taxonomies[] = array(
+				$count++;
 
-		            $cpt . '_tag_labels'         => array(
-		                'object_type'                   => $cpt,
-		                'label'                         => $cpt_name[$count]. ' Tags',
-		                'labels'                        => array(
-		                        'name'                      => $cpt_name[$count]. ' Tags',
-		                        'singluar_name'             => substr_replace( $cpt_name[$count]. ' Tags', "", -1 ),
-		                    ),
-		                'public'                        => true,
-		                'show_in_nav_menus'             => false,
-		                'show_ui'                       => true,
-		                'show_tagcloud'                 => false,
-		                'hierarchical'                  => true,
-		                'rewrite'                       => array('slug' => $cpt . '_tag'),
-		                'link_to_post_type'             => false,
-		                'post_type_link'                => null,
-		                'has_archive'                   => true
-		            ),
+			}
 
-		            $cpt . '_category_labels'    => array(
-		                'object_type'                   => $cpt,
-		                'label'                         => $cpt_name[$count]. ' Categories',
-		                'labels'                        => array(
-		                        'name'                      => $cpt_name[$count]. ' Categories',
-		                        'singluar_name'             => substr_replace( $cpt_name[$count]. ' Categories', "", -1 ),
-		                    ),
-		                'public'                        => true,
-		                'show_in_nav_menus'             => false,
-		                'show_ui'                       => true,
-		                'show_tagcloud'                 => false,
-		                'hierarchical'                  => true,
-		                'rewrite'                       => array('slug' => $cpt . '_category'),
-		                'link_to_post_type'             => false,
-		                'post_type_link'                => null,
-		                'has_archive'                   => true
-		            ),
+			foreach ( $cpt_tax as $key1 => $value1 ) :
 
-		        );
+				if ( array_intersect_key($cpt_tax, $check) ) :
 
-				// conditional check if custom tax set
-				if ( isset($cpt_tax[$count]) && !empty($cpt_tax[$count]) ) :
+					// taxes
+					global $taxonomies;
 
+					// sp($key1);
+					// sp($check[$key1]);
 
-					// // sp($cpt_tax);
-					// if ( is_array($cpt_tax) ) {
-					// 	foreach ($cpt_tax as $key => $value) {
-					// 		// sp($value);
-					// 		if ( !is_array($value) ) {
-					// 			sp($value);
-					// 		} else {
-					// 			foreach ($value as $key => $value) {
-					// 				sp($value);
-					// 			}
-					// 		}
-					// 	}
-					// }
+					$tax_name = ucfirst($check[$key1]);
 
-					if ( !is_array( $cpt_tax[$count] ) ) {
-						// sp($cpt_tax);
-						$label = preg_replace("/\W/", "_", strtolower($cpt_tax[$count]) );
-						$custom_tax[] = array(
-							$label    => array(
-									'object_type'                   => $cpt_slug[$count],
-									'label'                         => $cpt_tax[$count],
-									'labels'                        => array(
-									'name'                      => $cpt_tax[$count],
-									'singluar_name'             => substr_replace( $cpt_tax[$count].'s', "", -1 ),
-								),
-								'public'                        => true,
-								'show_in_nav_menus'             => false,
-								'show_ui'                       => true,
-								'show_tagcloud'                 => false,
-								'hierarchical'                  => true,
-								'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax[$count]) ) ),
-								'link_to_post_type'             => false,
-								'post_type_link'                => null,
-								'has_archive'                   => true
-							)
-						);
-					} else {
-						foreach ( $cpt_tax[$count] as $cpt_tax ) {
-							$label = preg_replace("/\W/", "_", strtolower($cpt_tax) );
-							// sp($cpt_tax);
-							// sp($label);
+					$taxonomies[] = array(
+
+					    $check[$key1] . '_tag_labels'         => array(
+					        'object_type'                   => $check[$key1],
+					        'label'                         => $tax_name . ' Tags',
+					        'labels'                        => array(
+					                'name'                      => $tax_name . ' Tags',
+					                'singluar_name'             => substr_replace( $check[$key1]. ' Tags', "", -1 ),
+					            ),
+					        'public'                        => true,
+					        'show_in_nav_menus'             => false,
+					        'show_ui'                       => true,
+					        'show_tagcloud'                 => false,
+					        'hierarchical'                  => true,
+					        'rewrite'                       => array('slug' => $check[$key1] . '_tag'),
+					        'link_to_post_type'             => false,
+					        'post_type_link'                => null,
+					        'has_archive'                   => true
+					    ),
+
+					    $check[$key1] . '_category_labels'    => array(
+					        'object_type'                   => $check[$key1],
+					        'label'                         => $tax_name . ' Categories',
+					        'labels'                        => array(
+					                'name'                      => $tax_name . ' Categories',
+					                'singluar_name'             => substr_replace( $tax_name . ' Categories', "", -1 ),
+					            ),
+					        'public'                        => true,
+					        'show_in_nav_menus'             => false,
+					        'show_ui'                       => true,
+					        'show_tagcloud'                 => false,
+					        'hierarchical'                  => true,
+					        'rewrite'                       => array('slug' => $check[$key1] . '_category'),
+					        'link_to_post_type'             => false,
+					        'post_type_link'                => null,
+					        'has_archive'                   => true
+					    ),
+
+					);
+
+					if ( isset($value1) && !empty($value1) ) :
+
+						if ( !is_array($value1) ) :
+
+							$label    = preg_replace("/\W/", "_", strtolower($value1) );
+							$tax_name = ucfirst($value1);
+
+							// sp($value1);
+
 							$custom_tax[] = array(
 								$label    => array(
-										'object_type'                   => $cpt_slug[$count],
-										'label'                         => $cpt_tax,
+										'object_type'                   => $check[$key1],
+										'label'                         => $tax_name,
 										'labels'                        => array(
-										'name'                      => $cpt_tax,
-										'singluar_name'             => substr_replace( $cpt_tax.'s', "", -1 ),
-									),
+											'name'                      => $tax_name,
+											'singluar_name'             => substr_replace( $tax_name .'s', "", -1 ),
+										),
 									'public'                        => true,
 									'show_in_nav_menus'             => false,
 									'show_ui'                       => true,
 									'show_tagcloud'                 => false,
 									'hierarchical'                  => true,
-									'rewrite'                       => array('slug' => preg_replace("/\W/", "-", strtolower($cpt_tax) ) ),
+									'rewrite'                       => array(
+										'slug' => preg_replace("/\W/", "-", strtolower($value1) )
+									),
 									'link_to_post_type'             => false,
 									'post_type_link'                => null,
 									'has_archive'                   => true
 								)
 							);
-						}
-					}
+
+						else :
+
+							foreach ( $value1 as $key => $value2 ) {
+
+								$label    = preg_replace("/\W/", "_", strtolower($value2) );
+								$tax_name = ucfirst($value2);
+
+								// sp($value2);
+
+								$custom_tax[] = array(
+									$label    => array(
+											'object_type'                   => $check[$key1],
+											'label'                         => $tax_name,
+											'labels'                        => array(
+												'name'                      => $tax_name,
+												'singluar_name'             => substr_replace( $tax_name .'s', "", -1 ),
+											),
+										'public'                        => true,
+										'show_in_nav_menus'             => false,
+										'show_ui'                       => true,
+										'show_tagcloud'                 => false,
+										'hierarchical'                  => true,
+										'rewrite'                       => array(
+											'slug' => preg_replace("/\W/", "-", strtolower($value2) )
+										),
+										'link_to_post_type'             => false,
+										'post_type_link'                => null,
+										'has_archive'                   => true
+									)
+								);
+
+							}
 
 
-					$taxonomies = array_merge($taxonomies, $custom_tax);
+						endif;
+
+						$taxonomies = array_merge($taxonomies, $custom_tax);
+
+					endif;
 
 				endif;
 
-				$count++;
+			endforeach;
 
-			}
+
+
+
+
+
+
+
 
 			// cpts
 			if ( $post_types ) {
