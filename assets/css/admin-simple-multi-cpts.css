@@ -1,6 +1,6 @@
 #adminmenu #menu-posts-simple-multi-cpts div.wp-menu-image{
     /*background:transparent url(../images/simple-multi-cpts-icon.png) no-repeat 6px -17px !important;*/
-    background-position: -300px -33px;
+    /*background-position: -300px -33px;*/
 }
 #adminmenu #menu-posts-simple-multi-cpts:hover div.wp-menu-image,
 #adminmenu #menu-posts-simple-multi-cpts.wp-has-current-submenu div.wp-menu-image {

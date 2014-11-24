@@ -35,54 +35,121 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
+// Setup ACF
+// Check if plugin is activated, if not set up lite version included with simple or fallback to plugin acf
+if ( ! class_exists('Acf') ) {
+    define( 'ACF_LITE' , true );
+    include_once( plugin_dir_path(__DIR__) . '/advanced-custom-fields-pro/acf.php' );
+}
+
+// load simple multi cpt acf settings
+require_once( plugin_dir_path( __FILE__ ) . 'simple-multi-acf.php' );
+
 //  Wrapped in after_setup_theme to utilize options
 add_action('after_setup_theme', 'simple_multi_cpts_plugin_init', 12);
 function simple_multi_cpts_plugin_init(){
 
-    global $plugin_name, $prefix, $plugin_url, $plugin_path, $plugin_basename, $cpt_slug, $cpt_name, $cpt_plural, $cpt_tax, $heirarchial, $has_archive, $rewriteUrl, $hide, $defaultStyles, $child_cpts;
+    global 
+    $plugin_name,
+    $prefix,
+    $plugin_url,
+    $plugin_path,
+    $plugin_basename,
+    $cpt_slug,
+    $cpt_name,
+    $cpt_plural,
+    $cpt_tax,
+    $heirarchial,
+    $has_archive,
+    $rewriteUrl,
+    $hide,
+    $cpt_icon,
+    $defaultStyles,
+    $child_cpts;
 
     //  Define Globals
     $plugin_name        =   'Simple Multi CPTS';   // change this - always prefix e.g. Simple Multi CPTS
 
     // Required: post type singular - e.g. Person
-    $cpt_name           =   array(
-                                // '',
-                            );
+    $cpt_name           =   [];
 
     // Required: post type plural - e.g. People
-    $cpt_plural         =   array(
-                                // '',
-                            );
+    $cpt_plural         =   [];
 
     // Optional: post type custom tax - e.g. Hobbies
-    $cpt_tax            =   array(
-                                // '',
-                            );
+    $cpt_tax            =   [];
 
     // Optional: post type rewrite slug - e.g. People
-    $rewriteUrl         =   array(
-                                // '',
-                            );
+    $rewriteUrl         =   [];
 
     // Optional: post type columns to hide - all default to true
-    $hide               =   array(
-                                // '',
-                            );
+    $hide               =   [];
 
+    // Optional: post type icons, e.g. unicode stripped to \f037
+    $cpt_icons          =   [];
 
     // allow filtering in child themes
-    $cpt_name   = isset(apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0]) ? apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] : [];
-    $cpt_plural = isset(apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1]) ? apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1] : [];
-    $cpt_tax    = isset(apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2]) ? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] : [];
-    $rewriteUrl = isset(apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3]) ? apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] : [];
+    $cpt_name   = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] ) 
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] 
+        : [];
+    $cpt_plural = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1] ) 
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1] 
+        : [];
+    $cpt_tax    = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] ) 
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] 
+        : [];
+    $rewriteUrl = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] ) 
+        ? apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] 
+        : [];
     $rewriteUrl = array_map('strtolower', $rewriteUrl);
-    $hide       = isset(apply_filters('simple_multi_cpts_plugin_init', $hide)[4]) ? apply_filters('simple_multi_cpts_plugin_init', $hide)[4] : [];
+    $hide       = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $hide)[4] ) 
+        ? apply_filters('simple_multi_cpts_plugin_init', $hide)[4] 
+        : [];
+    $cpt_icon   = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] ) 
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] 
+        : [];
+
+
+    // ACF Settings Field
+    $cpt = get_field('custom_post_type', 'option');
+
+    if ( $cpt ) :
+        
+        while ( has_sub_field('custom_post_type', 'option') ) :
+
+            $cpt_name[]    = ucfirst( get_sub_field('cpt_name') );
+            $cpt_plural[]  = ucfirst( get_sub_field('cpt_plural') );
+            $rewriteUrl[]  = ucfirst( get_sub_field('rewrite_url') );
+            $hide[]        = get_sub_field('hide_cpt');
+            $cpt_icon[]    = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
+
+            $cpt_array = [];
+
+            while ( has_sub_field('cpt_tax', 'option') ) :
+
+                $cpt_array[] = ucfirst( get_sub_field('tax_name') );
+
+            endwhile;
+
+            $cpt_tax[] = $cpt_array;
+
+
+        endwhile;
+
+    endif;
 
     // sp($cpt_name);
     // sp($cpt_plural);
     // sp($cpt_tax);
     // sp($rewriteUrl);
     // sp($hide);
+    // sp($cpt_icon);
 
     $plugin_name        =   preg_replace( "/\W/", "-", strtolower($plugin_name) );
     $prefix             =   preg_replace( "/\W/", "_", strtolower($plugin_name) );
