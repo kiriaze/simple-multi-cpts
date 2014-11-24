@@ -79,7 +79,7 @@ https://gist.github.com/kiriaze/f4c4664889a21731fecf
 	* Some code is inconsistent, flush out.
     * Nested forloops not ideal, look at index based comparison of arrays.
 2. ACF Settings
-	* To create cpts from admin if acf is active, rather than through functions.php
+	* Hide CPT field should be nested within custom taxonomy name since it affects on a per tax level
 3. Integrate new structure into other simple plugins
 
 ### Beer?
