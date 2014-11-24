@@ -63,7 +63,7 @@ function simple_child_cpts() {
         )
     );
 
-    $child_cpts = array($cpt_name, $cpt_plural, $cpt_tax, $rewriteUrl);
+    $child_cpts = array($cpt_name, $cpt_plural, $cpt_tax, $rewriteUrl, $hide);
 
     return $child_cpts;
 
@@ -73,6 +73,14 @@ function simple_child_cpts() {
 ### Look at
 https://gist.github.com/kiriaze/1ba01fd6f4287766922f    
 https://gist.github.com/kiriaze/f4c4664889a21731fecf
+
+### To Do's
+1. Optimize Code
+	* Some code is inconsistent, flush out.
+    * Nested forloops not ideal, look at index based comparison of arrays.
+2. ACF Settings
+	* To create cpts from admin if acf is active, rather than through functions.php
+3. Integrate new structure into other simple plugins
 
 ### Beer?
 [Beer me if ya want ;)](https://plasso.co/ckiriaze@gmail.com)
