@@ -62,6 +62,11 @@ function simple_child_cpts() {
             ''
         )
     );
+    
+    // Optional -  post type icons, e.g. unicode stripped to \f037
+    $cpt_icon = array(
+        '\f037',
+    );
 
     $child_cpts = array($cpt_name, $cpt_plural, $cpt_tax, $rewriteUrl, $hide);
 
