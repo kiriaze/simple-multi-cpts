@@ -197,10 +197,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 					    $check[$key1] . '_tag_labels'         => array(
 					        'object_type'                   => $check[$key1],
-					        'label'                         => $tax_name . ' Tags',
+					        'label'                         => 'Tags',
 					        'labels'                        => array(
-					                'name'                      => $tax_name . ' Tags',
-					                'singluar_name'             => substr_replace( $check[$key1]. ' Tags', "", -1 ),
+					                'name'                      => 'Tags',
+					                'singluar_name'             => 'Tag',
 					            ),
 					        'public'                        => true,
 					        'show_in_nav_menus'             => false,
@@ -215,10 +215,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 					    $check[$key1] . '_category_labels'    => array(
 					        'object_type'                   => $check[$key1],
-					        'label'                         => $tax_name . ' Categories',
+					        'label'                         => 'Categories',
 					        'labels'                        => array(
-					                'name'                      => $tax_name . ' Categories',
-					                'singluar_name'             => substr_replace( $tax_name . ' Categories', "", -1 ),
+					                'name'                      => 'Categories',
+					                'singluar_name'             => 'Category',
 					            ),
 					        'public'                        => true,
 					        'show_in_nav_menus'             => false,
@@ -355,8 +355,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				'thumbnail'                  => __( 'Thumbnail' ),
 	        );
 
-			$columns[ get_post_type() . '_categories'] = __( ucfirst( get_post_type() . ' Categories') );
-			$columns[ get_post_type() . '_tags']       = __( ucfirst( get_post_type() . ' Tags') );
+			$columns[ get_post_type() . '_categories'] = __( 'Categories');
+			$columns[ get_post_type() . '_tags']       = __( 'Tags');
 
 			// cleaner structure 11.25.14
 			$result = array();
@@ -544,6 +544,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				if ( $key == $typenow ) {
 
 					foreach ( $result[$key] as $tax  ) {
+
+						if ( is_array($tax) )
 
 						foreach ( $tax as $key => $value ) {
 
