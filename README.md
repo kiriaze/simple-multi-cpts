@@ -1,21 +1,27 @@
 Simple Multi Custom Post Types
 ===========
 
-#### Update!
-Now allows for an array of multiple taxonomies to be passed to each cpt. Also the ability to filter/sort them, as well as post type term count. Also added $hide[] to hide taxs from backends table row header and filter/sort dropdowns.
+#### Updates Galore!
+* Multiple taxonomies can now be passed to each cpt, supports arrays. 
+* Ability to filter/sort them, as well as post type term count.
+* Hide taxonomies backend table row header and filter/sort dropdowns through $hide[];
+* Custom post type icons from FontAwesome!
+* ACF Settings integration, now managable from wp admin instead of through functions file, or both if desired! Woot woot!
 
 ### What?
-A plugin that can handle multiple custom post types at once, requires atleast the singular and plural name of each cpt you would like to add, and optionally a custom taxonomy and slug rewrite.
+A plugin that can handle multiple custom post types at once, requires atleast the singular and plural name of each cpt you would like to add, and optionally a custom taxonomy, slug rewrite, hide options, and icon.
 
-Following the philosophy of keeping custom post types theme agnostic, this plugin follows a simplified version of Simple CPT Plugin. Although possible to input your values within the plugin code, it is **not** recommended, and to rather hook into it with the below code. This chunk is small enough to be easily placed within any theme - and although contradictory, its preferred over having multiple cpt plugins cluttering your project.
+Following the philosophy of keeping custom post types theme agnostic, this plugin is lightweight and efficient and allows for adding infinite custom post types/taxonomies through wp admin ( Requires ACF ) or by hooking into the function within your theme, look at example below. This chunk is small enough to be easily placed within any theme - and is preferred over having multiple cpt plugins cluttering and slowing down your project.
 
 ### Why?
 Came across a project requiring a ridiculous amount of custom post types, and didn't think that having over 10 separate plugins for handling those post types were ideal - so I made one to rule them all. ba-dum-dum-tshh.
 
 ### How?
-1. Download/Clone, install and activate plugin.
-2. Place hook into theme functions. ( Preferably into abstracted module, look @ simple. ) Note: Capitalise first letter.
-3. Notice how not every post type needs a tax or rewrite, however since this plugin works in array association, you will need to add an empty string for that relation. Allows for an array of multiple taxonomies to be passed to each cpt.
+1. Download/Clone/Composer that ish, install and activate plugin.
+2. ACF active? ( And it should be guys! )
+	* Skip the rest and head to the plugin settings page, else continue.
+3. If not, place hook into theme functions. ( Preferably into abstracted module, look @ simple. ) Note: Capitalise first letter.
+4. Notice how not every post type needs a tax or rewrite, however since this plugin works in array association, you will need to add an empty string for that relation. Allows for an array of multiple taxonomies to be passed to each cpt.
 
 ```
 // hook into simple multi cpts
