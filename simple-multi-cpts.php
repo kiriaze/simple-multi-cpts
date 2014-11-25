@@ -45,11 +45,56 @@ if ( ! class_exists('Acf') ) {
 // load simple multi cpt acf settings
 require_once( plugin_dir_path( __FILE__ ) . 'simple-multi-acf.php' );
 
+// Simple Multi Custom Post Type Settings Page
+if ( function_exists('acf_add_options_sub_page') ) {
+
+    acf_add_options_page(array(
+        'page_title'    => 'SMCPT Settings',
+        'menu_title'    => 'SMCPT Settings',
+        'menu_slug'     => 'smcpt-settings',
+        'capability'    => 'edit_posts',
+        'redirect'      => false
+    ));
+
+}
+
+// acf settings icon font awesome plugin
+add_action( 'tgmpa_register', 'simple_multi_cpts_require_plugins' );
+function simple_multi_cpts_require_plugins() {
+
+    $plugins = array(
+        array(
+            'name'          => 'Advanced Custom Fields: Font Awesome',
+            'slug'          => 'advanced-custom-fields-font-awesome',
+            'required'      => true,
+            'force_activation' => true, // activate this plugin when the user switches to another theme
+            'force_deactivation' => true, // deactivate this plugin when the user switches to another theme
+        )
+    );
+
+    $config = array(
+        'default_path' => '',                      // Default absolute path to pre-packaged plugins.
+        'menu'         => 'tgmpa-install-plugins', // Menu slug.
+        'has_notices'  => true,                    // Show admin notices or not.
+        'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
+        'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
+        'is_automatic' => false,                   // Automatically activate plugins after installation or not.
+        'message'      => '',                      // Message to output right before the plugins table.
+        'strings'      => array(
+            'notice_can_install_required'     => _n_noop( 'This plugin requires the following plugin: %1$s.', 'This plugin requires the following plugins: %1$s.' ), // %1$s = plugin name(s).
+            'notice_can_install_recommended'  => _n_noop( 'This plugin recommends the following plugin: %1$s.', 'This plugin recommends the following plugins: %1$s.' ), // %1$s = plugin name(s).
+        )
+    );
+
+    tgmpa( $plugins, $config );
+
+}
+
 //  Wrapped in after_setup_theme to utilize options
 add_action('after_setup_theme', 'simple_multi_cpts_plugin_init', 12);
 function simple_multi_cpts_plugin_init(){
 
-    global 
+    global
     $plugin_name,
     $prefix,
     $plugin_url,
@@ -89,30 +134,30 @@ function simple_multi_cpts_plugin_init(){
     $cpt_icons          =   [];
 
     // allow filtering in child themes
-    $cpt_name   = 
-        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] ) 
-        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] 
+    $cpt_name   =
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0]
         : [];
-    $cpt_plural = 
-        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1] ) 
-        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1] 
+    $cpt_plural =
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_plural)[1]
         : [];
-    $cpt_tax    = 
-        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] ) 
-        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] 
+    $cpt_tax    =
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2]
         : [];
-    $rewriteUrl = 
-        isset( apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] ) 
-        ? apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] 
+    $rewriteUrl =
+        isset( apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3]
         : [];
     $rewriteUrl = array_map('strtolower', $rewriteUrl);
-    $hide       = 
-        isset( apply_filters('simple_multi_cpts_plugin_init', $hide)[4] ) 
-        ? apply_filters('simple_multi_cpts_plugin_init', $hide)[4] 
+    $hide       =
+        isset( apply_filters('simple_multi_cpts_plugin_init', $hide)[4] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $hide)[4]
         : [];
-    $cpt_icon   = 
-        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] ) 
-        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] 
+    $cpt_icon   =
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5]
         : [];
 
 
@@ -120,7 +165,7 @@ function simple_multi_cpts_plugin_init(){
     $cpt = get_field('custom_post_type', 'option');
 
     if ( $cpt ) :
-        
+
         while ( has_sub_field('custom_post_type', 'option') ) :
 
             $cpt_name[]    = ucfirst( get_sub_field('cpt_name') );
