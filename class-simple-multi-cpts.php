@@ -21,7 +21,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	    function __construct() {
 
 	        //  Grab globals passed from init
-	        global 
+	        global
 	        $cpt_slug,
 	        $cpt_name,
 	        $cpt_plural,
@@ -92,10 +92,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	    function cpt_icon() {
 	        $count			= 0;
 	        foreach ( $this->cpt_slug as $key => $value ) {
-	        	
+
 				$icon = !empty($this->icon[$count]) ? $this->icon[$count] : '\f109';
 				$font = !empty($this->icon[$count]) ? 'FontAwesome' : 'dashicons';
-	        	
+
 		        echo '<style>
 			        #adminmenu #menu-posts-'. $value .' div.wp-menu-image:before {
 		        		font-family: ' . $font . ';
@@ -312,8 +312,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			if ( $post_types ) {
 				foreach ( $post_types as $post_type ) {
 					foreach ( $post_type as $key => $value ) {
-						// sp($key);
-						// sp($value);
 				    	register_post_type( $key, $value );
 					}
 				}
@@ -329,13 +327,11 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 		        	foreach ( $taxonomy as $key => $value ) {
 
-						// sp($key);
-						// sp($value);
-
 			            register_taxonomy( $key, $value['object_type'], $value );
 
-			            if ( $value['link_to_post_type'] )
+			            if ( $value['link_to_post_type'] ) {
 			            	$association_array[$taxonomy] = $value['post_type_link'];
+			            }
 
 		        	}
 
@@ -362,59 +358,37 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$columns[ get_post_type() . '_categories'] = __( ucfirst( get_post_type() . ' Categories') );
 			$columns[ get_post_type() . '_tags']       = __( ucfirst( get_post_type() . ' Tags') );
 
-			$check = array();
+			// cleaner structure 11.25.14
+			$result = array();
 
 			foreach ( $cpt_slug as $key => $value ) {
-				$check[] = $value;
+				$result[$value] = array(
+					'cpt_tax' => $cpt_tax[$key],
+					'hide'    => $hide[$key],
+				);
 			}
 
-			foreach ( $cpt_tax as $key => $value ) {
+			$count = 0;
 
-				if ( $key == array_search( get_post_type(), $check ) ) {
+			foreach ( $result as $key => $value ) {
 
-					if ( is_array($cpt_tax) ) {
+				if ( $key == get_post_type() ) {
 
-						if ( $value ) {
+					$hide = $value['hide'];
 
-							if ( is_array($value) ) {
+					foreach ( $value['cpt_tax'] as $key2 => $value2 ) {
+						$columns[$cpt_tax[$count][$key2]] = __( ucfirst($cpt_tax[$count][$key2]) );
+					}
 
-								foreach ($value as $key => $value) {
-									
-									$columns[$value] = __( ucfirst($value) );
-									
-									// unset ones from hide array
-									foreach ( $hide as $key2 => $value2 ) {
-										if ( is_array($value2) ) {
-											foreach ($value2 as $key3 => $value3) {
-												if ( $value3 == 1 ) {
-													unset($columns[$cpt_tax[$key2][$key3]]);
-												}
-											}
-										}
-									}
-
-								}
-
-							} else {
-
-								$columns[$value] = __( ucfirst( $cpt_tax[ array_search( get_post_type(), $check ) ] ) );
-
-								foreach ( $hide as $key => $value ) {
-									if ( $value == 1 ) {
-										// sp($cpt_tax[$key]);
-										unset($columns[$cpt_tax[$key]]);
-									}
-								}
-								
-							}
-
-
+					foreach ( $hide as $key3 => $value3 ) {
+						if ( $value3 ) {
+							unset($columns[$cpt_tax[$count][$key3]]);
 						}
-
 					}
 
 				}
 
+				$count++;
 			}
 
 			$columns['date']       = __( 'Date' );
@@ -440,49 +414,67 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	        foreach ( $cpt_slug as $cpt_slug ) {
 
 	        	if ( $column == $cpt_slug . '_categories' ) {
+
 					$args = array(
 						'taxonomy' => $cpt_slug . '_category_labels',
 						'postID'   => $post->ID
 					);
+
 					do_action('simple_list_terms', $args);
 	        	}
 
 				if ( $column == $cpt_slug . '_tags' ) {
+
 					$args = array(
 						'taxonomy' => $cpt_slug . '_tag_labels',
 						'postID'   => $post->ID
 					);
+
 					do_action('simple_list_terms', $args);
+
 				}
 
 
 	        }
 
 			if ( is_array($cpt_tax) ) {
-				// sp($cpt_tax);
+
 				foreach ( $cpt_tax as $key => $value ) {
+
 					if ( !is_array($value) ) {
-						// sp($value);
+
 						if ( $column == $value ) :
+
 							$args = array(
 								'taxonomy' => strtolower($value),
 								'postID'   => $post->ID
 							);
+
 							do_action('simple_list_terms', $args);
+
 						endif;
+
 					} else {
-						foreach ($value as $key => $value) {
-							// sp($value);
+
+						foreach ( $value as $key => $value ) {
+
 							if ( $column == $value ) :
+
 								$args = array(
 									'taxonomy' => strtolower($value),
 									'postID'   => $post->ID
 								);
+
 								do_action('simple_list_terms', $args);
+
 							endif;
+
 						}
+
 					}
+
 				}
+
 			}
 
 	    }
@@ -500,17 +492,23 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	        }
 
 			if ( is_array($cpt_tax) ) {
-				foreach ($cpt_tax as $key => $value) {
+
+				foreach ( $cpt_tax as $key => $value ) {
+
 					if ( !is_array($value) ) {
-						// sp($value);
+
 						$columns[$value] = __( ucfirst($value) );
+
 					} else {
+
 						foreach ( $value as $key => $value ) {
-							// sp($value);
 							$columns[$value] = __( ucfirst($value) );
 						}
+
 					}
+
 				}
+
 			}
 
 	        $columns['thumbnail']   					= 'thumbnail';
@@ -530,110 +528,59 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_tax		= $this->cpt_tax;
 			$hide			= $this->hide;
 
-			// $taxonomies = [];
-
-			$check = array();
+			$result			= array();
 
 			foreach ( $cpt_slug as $key => $value ) {
-				$check[] = $value;
+
+				$result[$value] = array(
+					'cpt_tax' => $cpt_tax[$key],
+					'hide'    => $hide[$key],
+				);
+
 			}
 
-			foreach ( $hide as $key => $value ) {
-				if ( is_array($value) ) {
-					foreach ( $value as $key2 => $value2 ) {
-						if ( $value2 == 1 ) {
-							// sp($cpt_tax[$key][$key2]);
-							unset($cpt_tax[$key][$key2]);
-							// sp($cpt_tax);
-						}
-					}
-				}
-			}
+			foreach ($result as $key => $value) {
 
-			foreach ( $cpt_tax as $key => $value ) {
+				if ( $key == $typenow ) {
 
-				if ( isset( $check[$key] ) ) {
+					foreach ( $result[$key] as $tax  ) {
 
-					// var_dump($key);
-					// var_dump($value);
-					// var_dump($check[$key]);
+						foreach ( $tax as $key => $value ) {
 
-					if ( $check[$key] == get_post_type() ) {
-						// var_dump($value);
-						// Use tax name or slug
-		        		$taxonomies[] = $check[$key] . '_category_labels';
-		        		$taxonomies[] = $check[$key] . '_tag_labels';
-						if ( is_array($value) ) {
-							foreach ($value as $key => $value) {
-								if ( !is_array($value) ) {
-									// sp($value);
-									$taxonomies[] = preg_replace("/\W/", "_", strtolower($value) );
-								} else {
-									foreach ($value as $key => $value) {
-										// sp($value);
-										$taxonomies[] = preg_replace("/\W/", "_", strtolower($value) );
-									}
+							if ( $value ) {
+
+								$termSlug = strtolower($value);
+
+								$current_tax = isset( $_GET[$termSlug] ) ? $_GET[$termSlug] : false;
+
+								$termArgs = array(
+									'hide_empty' => 0,
+									'post_type' => $typenow,
+								);
+
+								$terms = get_terms($termSlug, $termArgs);
+
+								if ( count( $terms ) > 0 ) {
+
+								    echo "<select name='".$termSlug."' id='".$termSlug."' class='postform'>";
+								    echo "<option value=''>View all ".$value."</option>";
+
+								    foreach ( $terms as $term ) {
+										echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
+								    }
+
+								    echo "</select>";
 								}
+
 							}
+
 						}
+
 					}
 
 				}
 
 			}
-
-			foreach ( $taxonomies as $tax ) {
-
-				if ( !empty($tax) ) :
-
-			        $current_tax = isset( $tax ) ? $tax : false;
-
-					if ( $tax ) {
-						if ( is_array($tax) ) {
-							$tax = array_keys($tax);
-							foreach ( $tax as $tax ) {
-								$tax_obj = get_taxonomy( strtolower($tax) );
-							}
-						} else {
-							$tax_obj = get_taxonomy( strtolower($tax) );
-						}
-					}
-
-			        if ( is_array($tax_obj) ) {
-						foreach ($tax_obj as $key => $value) {
-							if ( !is_array($tax_obj) ) {
-								// sp($value);
-								$tax_name = $value;
-							} else {
-								foreach ($tax_obj as $key => $value) {
-									// sp($value);
-									$tax_name = $value;
-								}
-							}
-						}
-					} else {
-			        	$tax_name = $tax_obj->labels->name;
-					}
-
-					$termArgs = array(
-						'hide_empty' => 0,
-						'post_type' => get_post_type(),
-					);
-
-					$terms = get_terms($tax, $termArgs);
-
-					if ( count( $terms ) > 0 ) {
-					    echo "<select name='$tax' id='$tax' class='postform'>";
-					    echo "<option value=''>$tax_name</option>";
-					    foreach ( $terms as $term ) {
-					        echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
-					    }
-					    echo "</select>";
-					}
-
-			    endif;
-
-		    }
 
 	    }
 
