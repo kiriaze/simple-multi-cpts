@@ -190,13 +190,6 @@ function simple_multi_cpts_plugin_init(){
 
     endif;
 
-    // sp($cpt_name);
-    // sp($cpt_plural);
-    // sp($cpt_tax);
-    // sp($rewriteUrl);
-    // sp($hide);
-    // sp($cpt_icon);
-
     $plugin_name        =   preg_replace( "/\W/", "-", strtolower($plugin_name) );
     $prefix             =   preg_replace( "/\W/", "_", strtolower($plugin_name) );
     $plugin_url         =   plugin_dir_url( __FILE__ );
@@ -208,6 +201,28 @@ function simple_multi_cpts_plugin_init(){
 
     $heirarchial        = true;
     $has_archive        = true;
+
+
+    // sp($cpt_name);
+    // sp($cpt_plural);
+    // sp($cpt_tax);
+    // sp($rewriteUrl);
+    // sp($hide);
+    // sp($cpt_icon);
+
+    // $result         = array();
+    // foreach ( $cpt_slug as $key => $value ) {
+
+    //     $result[$value] = array(
+    //         'cpt_plural' => $cpt_plural[$key],
+    //         'rewriteUrl' => $rewriteUrl[$key],
+    //         'cpt_tax'    => $cpt_tax[$key],
+    //         'hide'       => $hide[$key],
+    //         'cpt_icon'   => $cpt_icon[$key]
+    //     );
+
+    // }
+    // sp($result);
 
     //  Load class
     require_once( $plugin_path . 'class-'.$plugin_name.'.php' );
