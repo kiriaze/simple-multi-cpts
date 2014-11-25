@@ -89,9 +89,7 @@ https://gist.github.com/kiriaze/f4c4664889a21731fecf
 1. Optimize Code
 	* Some code is inconsistent, flush out.
     * Nested forloops not ideal, look at index based comparison of arrays.
-2. ACF Settings
-	* Hide CPT field should be nested within custom taxonomy name since it affects on a per tax level
-3. Integrate new structure into other simple plugins
+2. Integrate new structure/philosophy into other simple plugins
 
 ### Beer?
 [Beer me if ya want ;)](https://plasso.co/ckiriaze@gmail.com)
