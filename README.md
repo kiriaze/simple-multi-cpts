@@ -68,7 +68,7 @@ function simple_child_cpts() {
         '\f037',
     );
 
-    $child_cpts = array($cpt_name, $cpt_plural, $cpt_tax, $rewriteUrl, $hide);
+    $child_cpts = array($cpt_name, $cpt_plural, $cpt_tax, $rewriteUrl, $hide, $cpt_icon);
 
     return $child_cpts;
 
