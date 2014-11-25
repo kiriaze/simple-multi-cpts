@@ -171,19 +171,20 @@ function simple_multi_cpts_plugin_init(){
             $cpt_name[]    = ucfirst( get_sub_field('cpt_name') );
             $cpt_plural[]  = ucfirst( get_sub_field('cpt_plural') );
             $rewriteUrl[]  = ucfirst( get_sub_field('rewrite_url') );
-            $hide[]        = get_sub_field('hide_cpt');
             $cpt_icon[]    = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
 
-            $cpt_array = [];
+            $cpt_array  = [];
+            $hide_array = [];
 
             while ( has_sub_field('cpt_tax', 'option') ) :
 
-                $cpt_array[] = ucfirst( get_sub_field('tax_name') );
+                $cpt_array[]    = ucfirst( get_sub_field('tax_name') );
+                $hide_array[]   = get_sub_field('hide_tax');
 
             endwhile;
 
             $cpt_tax[] = $cpt_array;
-
+            $hide[]    = $hide_array;
 
         endwhile;
 

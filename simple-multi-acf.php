@@ -1,6 +1,6 @@
 <?php
 
-if ( function_exists('register_field_group') ) :
+if( function_exists('register_field_group') ):
 
 register_field_group(array (
 	'key' => 'group_546f74f3b09b9',
@@ -110,34 +110,29 @@ register_field_group(array (
 							'readonly' => 0,
 							'disabled' => 0,
 						),
+						array (
+							'key' => 'field_54741b25baf58',
+							'label' => 'Hide Taxonomy',
+							'name' => 'hide_tax',
+							'prefix' => '',
+							'type' => 'true_false',
+							'instructions' => 'Hide from filters and columns.',
+							'required' => 0,
+							'conditional_logic' => 0,
+							'wrapper' => array (
+								'width' => '',
+								'class' => '',
+								'id' => '',
+							),
+							'message' => '',
+							'default_value' => 0,
+						),
 					),
 				),
 				array (
 					'key' => 'field_5473843a25fae',
 					'label' => 'Rewrite URL',
 					'name' => 'rewrite_url',
-					'prefix' => '',
-					'type' => 'text',
-					'instructions' => '',
-					'required' => 0,
-					'conditional_logic' => 0,
-					'wrapper' => array (
-						'width' => '',
-						'class' => '',
-						'id' => '',
-					),
-					'default_value' => '',
-					'placeholder' => '',
-					'prepend' => '',
-					'append' => '',
-					'maxlength' => '',
-					'readonly' => 0,
-					'disabled' => 0,
-				),
-				array (
-					'key' => 'field_5473845c25faf',
-					'label' => 'Hide CPT',
-					'name' => 'hide_cpt',
 					'prefix' => '',
 					'type' => 'text',
 					'instructions' => '',
