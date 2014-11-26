@@ -75,9 +75,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			//  Add Icon
 			add_action( 'admin_head', array( &$this, 'cpt_icon' ) );
 
-			//  Custom Thumbnail Sizes
-			add_action( 'after_setup_theme', array($this, 'custom_thumbnail_size') );
-
 			// Scripts / Styles
 			add_action( 'admin_enqueue_scripts', array( &$this, 'load_scripts' ) );
 
@@ -112,14 +109,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	        wp_enqueue_style( 'admin-simple-multi-cpts', plugins_url( 'advanced-custom-fields-font-awesome/better-font-awesome-library/lib/fallback-font-awesome/css/font-awesome.min.css', __DIR__ ) );
 	    }
 
-	    //  Custom Thumbnail Size
-	    function custom_thumbnail_size() {
-	        // sp($this->cpt_slug);
-	        foreach ( $this->cpt_slug as $cpt ) {
-	        	add_image_size($cpt . '-thumb', 100, 100, true); // 100px x 100px with hard crop enabled
-	        }
-	    }
-
 	    //  Posttype / Taxonomy Registration
 		function cpt_init() {
 
@@ -144,12 +133,11 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			foreach ( $cpt_slug as $key => $value ) {
 
 				$check[] = $value;
-
+				
 				if ( isset($rewrite[$count]) ) {
 					$str                		= "$rewrite[$count]";
 					$rewrite[$count]            = ( $rewrite[$count] != 'false' ) ? serialize(array_combine( $fields, explode ( ", ", $str ) )) : 'false';
 					$rewrite[$count] 			= unserialize($rewrite[$count]);
-					// sp($rewrite[$count]);
 				}
 
 				$post_types[] = array(

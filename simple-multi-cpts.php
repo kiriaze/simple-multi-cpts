@@ -150,7 +150,6 @@ function simple_multi_cpts_plugin_init(){
         isset( apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3] )
         ? apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[3]
         : [];
-    $rewriteUrl = array_map('strtolower', $rewriteUrl);
     $hide       =
         isset( apply_filters('simple_multi_cpts_plugin_init', $hide)[4] )
         ? apply_filters('simple_multi_cpts_plugin_init', $hide)[4]
@@ -190,6 +189,7 @@ function simple_multi_cpts_plugin_init(){
 
     endif;
 
+    $rewriteUrl         =   preg_replace( "/\W/", "-", array_map('strtolower', $rewriteUrl) );
     $plugin_name        =   preg_replace( "/\W/", "-", strtolower($plugin_name) );
     $prefix             =   preg_replace( "/\W/", "_", strtolower($plugin_name) );
     $plugin_url         =   plugin_dir_url( __FILE__ );
