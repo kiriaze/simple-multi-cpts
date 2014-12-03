@@ -15,10 +15,12 @@ function simple_multi_cpts_require_plugins() {
             'force_activation'   => true, // activate this plugin when the user switches to another theme
             'force_deactivation' => true // deactivate this plugin when the user switches to another theme
         ),
-        array(
-            'name'               => 'Advanced Custom Fields: Font Awesome',
-            'slug'               => 'advanced-custom-fields-font-awesome',
-            'required'           => true,
+         array(
+            'name'               => 'Advanced Custom Fields: Font Awesome', // The plugin name.
+            'slug'               => 'advanced-custom-fields-font-awesome-master', // The plugin slug (typically the folder name).
+            'source'             => 'https://github.com/kiriaze/advanced-custom-fields-font-awesome/archive/master.zip', // The plugin source.
+            'required'           => true, // If false, the plugin is only 'recommended' instead of required.
+            'external_url'       => 'https://github.com/kiriaze/advanced-custom-fields-font-awesome', // If set, overrides default API URL and points to an external URL.
             'force_activation'   => true, // activate this plugin when the user switches to another theme
             'force_deactivation' => true // deactivate this plugin when the user switches to another theme
         )
