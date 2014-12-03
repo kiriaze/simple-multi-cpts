@@ -35,66 +35,15 @@ if ( ! defined( 'WPINC' ) ) {
     die;
 }
 
-// Setup ACF
-// Check if plugin is activated, if not set up lite version included with simple or fallback to plugin acf
-if ( ! class_exists('Acf') ) {
-    define( 'ACF_LITE' , true );
-    include_once( plugin_dir_path(__DIR__) . '/advanced-custom-fields-pro/acf.php' );
-}
-
-// load simple multi cpt acf settings
-require_once( plugin_dir_path( __FILE__ ) . 'simple-multi-acf.php' );
-
-// Simple Multi Custom Post Type Settings Page
-if ( function_exists('acf_add_options_sub_page') ) {
-
-    acf_add_options_page(array(
-        'page_title'    => 'SMCPT Settings',
-        'menu_title'    => 'SMCPT Settings',
-        'menu_slug'     => 'smcpt-settings',
-        'capability'    => 'edit_posts',
-        'redirect'      => false
-    ));
-
-}
-
-// acf settings icon font awesome plugin
-add_action( 'tgmpa_register', 'simple_multi_cpts_require_plugins' );
-function simple_multi_cpts_require_plugins() {
-
-    $plugins = array(
-        array(
-            'name'          => 'Advanced Custom Fields: Font Awesome',
-            'slug'          => 'advanced-custom-fields-font-awesome',
-            'required'      => true,
-            'force_activation' => true, // activate this plugin when the user switches to another theme
-            'force_deactivation' => true, // deactivate this plugin when the user switches to another theme
-        )
-    );
-
-    $config = array(
-        'default_path' => '',                      // Default absolute path to pre-packaged plugins.
-        'menu'         => 'tgmpa-install-plugins', // Menu slug.
-        'has_notices'  => true,                    // Show admin notices or not.
-        'dismissable'  => true,                    // If false, a user cannot dismiss the nag message.
-        'dismiss_msg'  => '',                      // If 'dismissable' is false, this message will be output at top of nag.
-        'is_automatic' => false,                   // Automatically activate plugins after installation or not.
-        'message'      => '',                      // Message to output right before the plugins table.
-        'strings'      => array(
-            'notice_can_install_required'     => _n_noop( 'This plugin requires the following plugin: %1$s.', 'This plugin requires the following plugins: %1$s.' ), // %1$s = plugin name(s).
-            'notice_can_install_recommended'  => _n_noop( 'This plugin recommends the following plugin: %1$s.', 'This plugin recommends the following plugins: %1$s.' ), // %1$s = plugin name(s).
-        )
-    );
-
-    tgmpa( $plugins, $config );
-
-}
+// load simple multi cpt acf settings - if acf exists/active
+require_once( plugin_dir_path( __FILE__ ) . 'acf-dependencies.php' );
 
 //  Wrapped in after_setup_theme to utilize options
 add_action('after_setup_theme', 'simple_multi_cpts_plugin_init', 12);
 function simple_multi_cpts_plugin_init(){
 
     global
+    $acf,
     $plugin_name,
     $prefix,
     $plugin_url,
@@ -160,33 +109,36 @@ function simple_multi_cpts_plugin_init(){
         : [];
 
 
-    // ACF Settings Field
-    $cpt = get_field('custom_post_type', 'option');
+    if ( class_exists('acf') ) :
 
-    if ( $cpt ) :
+        // ACF Settings Field
+        $cpt = get_field('custom_post_type', 'option');
 
-        while ( has_sub_field('custom_post_type', 'option') ) :
+        if ( $cpt ) :
 
-            $cpt_name[]    = ucfirst( get_sub_field('cpt_name') );
-            $cpt_plural[]  = ucfirst( get_sub_field('cpt_plural') );
-            $rewriteUrl[]  = ucfirst( get_sub_field('rewrite_url') );
-            $cpt_icon[]    = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
+            while ( has_sub_field('custom_post_type', 'option') ) :
 
-            $cpt_array  = [];
-            $hide_array = [];
+                $cpt_name[]    = ucfirst( get_sub_field('cpt_name') );
+                $cpt_plural[]  = ucfirst( get_sub_field('cpt_plural') );
+                $rewriteUrl[]  = ucfirst( get_sub_field('rewrite_url') );
+                $cpt_icon[]    = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
 
-            while ( has_sub_field('cpt_tax', 'option') ) :
+                $cpt_array  = [];
+                $hide_array = [];
 
-                $cpt_array[]    = ucfirst( get_sub_field('tax_name') );
-                $hide_array[]   = get_sub_field('hide_tax');
+                while ( has_sub_field('cpt_tax', 'option') ) :
+
+                    $cpt_array[]    = ucfirst( get_sub_field('tax_name') );
+                    $hide_array[]   = get_sub_field('hide_tax');
+
+                endwhile;
+
+                $cpt_tax[] = $cpt_array;
+                $hide[]    = $hide_array;
 
             endwhile;
 
-            $cpt_tax[] = $cpt_array;
-            $hide[]    = $hide_array;
-
-        endwhile;
-
+        endif;
     endif;
 
     $rewriteUrl         =   preg_replace( "/\W/", "-", array_map('strtolower', $rewriteUrl) );
