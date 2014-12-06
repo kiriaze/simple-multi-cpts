@@ -31,6 +31,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 	        $rewriteUrl,
 	        $hide,
 	        $cpt_icon,
+	        $cpt_supports,
 	        $defaultStyles;
 
 	        //  Set them relative to function
@@ -43,6 +44,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$this->rewrite       = $rewriteUrl;
 			$this->hide          = $hide;
 			$this->icon			 = $cpt_icon;
+			$this->supports		 = $cpt_supports;
 			$this->defaultStyles = $defaultStyles;
 
 	        //  Plugin Activation
@@ -121,6 +123,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$has_archive	= $this->has_archive;
 			$cpt_tax		= $this->cpt_tax;
 			$hide			= $this->hide;
+			$cpt_supports	= $this->supports;
 			$post_types		= '';
 			$taxonomies		= '';
 
@@ -155,7 +158,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				            'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
 				        ),
 				        'public'                    => true,
-				        'supports'                  => array( 'title', 'editor','thumbnail'),
+				        'supports'                  => $cpt_supports,
 				        'capability_type'           => 'post',
 				        'menu_position'             => '15',
 						'hierarchical'              => $heirarchial,

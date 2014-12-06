@@ -58,6 +58,7 @@ function simple_multi_cpts_plugin_init(){
     $rewriteUrl,
     $hide,
     $cpt_icon,
+    $cpt_supports,
     $defaultStyles,
     $child_cpts;
 
@@ -81,6 +82,9 @@ function simple_multi_cpts_plugin_init(){
 
     // Optional: post type icons, e.g. unicode stripped to \f037
     $cpt_icons          =   [];
+
+    // Optional: defaults to all currently
+    $cpt_supports       =   [];
 
     // allow filtering in child themes
     $cpt_name   =
@@ -107,6 +111,25 @@ function simple_multi_cpts_plugin_init(){
         isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] )
         ? apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5]
         : [];
+    $cpt_supports = 
+        isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_supports)[6] )
+        ? apply_filters('simple_multi_cpts_plugin_init', $cpt_supports)[6]
+        : [];
+
+    // temp
+    $cpt_supports = array(
+        'title', 
+        'editor',
+        'author',
+        'thumbnail',
+        'excerpt',
+        'trackbacks',
+        'custom-fields',
+        'comments',
+        'revisions',
+        'page-attributes',
+        'post-formats'
+    );
 
 
     if ( class_exists('acf') ) :
@@ -161,6 +184,7 @@ function simple_multi_cpts_plugin_init(){
     // sp($rewriteUrl);
     // sp($hide);
     // sp($cpt_icon);
+    // sp($cpt_supports);
 
     // $result         = array();
     // foreach ( $cpt_slug as $key => $value ) {
