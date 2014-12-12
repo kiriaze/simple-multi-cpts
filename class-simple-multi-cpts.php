@@ -164,7 +164,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						'hierarchical'              => $heirarchial,
 						'has_archive'               => $has_archive,
 						'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
-						'taxonomies' 				=> array('category', 'post_tag') // this is IMPORTANT
+						'taxonomies' 				=> array( 'category', 'post_tag') // this is IMPORTANT
 				    ),
 				);
 
@@ -184,45 +184,49 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 					$tax_name = ucfirst($check[$key1]);
 
-					$taxonomies[] = array(
+					$taxonomies[] = array();
 
-					    $check[$key1] . '_tag_labels'         => array(
-					        'object_type'                   => $check[$key1],
-					        'label'                         => 'Tags',
-					        'labels'                        => array(
-					                'name'                      => 'Tags',
-					                'singluar_name'             => 'Tag',
-					            ),
-					        'public'                        => true,
-					        'show_in_nav_menus'             => false,
-					        'show_ui'                       => true,
-					        'show_tagcloud'                 => false,
-					        'hierarchical'                  => true,
-					        'rewrite'                       => array('slug' => $check[$key1] . '_tag'),
-					        'link_to_post_type'             => false,
-					        'post_type_link'                => null,
-					        'has_archive'                   => true
-					    ),
+					// NOTE: Disabled below, tags/cats that are attached are global, and if unique simply add tax through interface
 
-					    $check[$key1] . '_category_labels'    => array(
-					        'object_type'                   => $check[$key1],
-					        'label'                         => 'Categories',
-					        'labels'                        => array(
-					                'name'                      => 'Categories',
-					                'singluar_name'             => 'Category',
-					            ),
-					        'public'                        => true,
-					        'show_in_nav_menus'             => false,
-					        'show_ui'                       => true,
-					        'show_tagcloud'                 => false,
-					        'hierarchical'                  => true,
-					        'rewrite'                       => array('slug' => $check[$key1] . '_category'),
-					        'link_to_post_type'             => false,
-					        'post_type_link'                => null,
-					        'has_archive'                   => true
-					    ),
+					// $taxonomies[] = array(
 
-					);
+					//     $check[$key1] . '_tag_labels'         => array(
+					//         'object_type'                   => $check[$key1],
+					//         'label'                         => 'Tags',
+					//         'labels'                        => array(
+					//                 'name'                      => 'Tags',
+					//                 'singluar_name'             => 'Tag',
+					//             ),
+					//         'public'                        => true,
+					//         'show_in_nav_menus'             => false,
+					//         'show_ui'                       => true,
+					//         'show_tagcloud'                 => false,
+					//         'hierarchical'                  => true,
+					//         'rewrite'                       => array('slug' => $check[$key1] . '_tag'),
+					//         'link_to_post_type'             => false,
+					//         'post_type_link'                => null,
+					//         'has_archive'                   => true
+					//     ),
+
+					//     $check[$key1] . '_category_labels'    => array(
+					//         'object_type'                   => $check[$key1],
+					//         'label'                         => 'Categories',
+					//         'labels'                        => array(
+					//                 'name'                      => 'Categories',
+					//                 'singluar_name'             => 'Category',
+					//             ),
+					//         'public'                        => true,
+					//         'show_in_nav_menus'             => false,
+					//         'show_ui'                       => true,
+					//         'show_tagcloud'                 => false,
+					//         'hierarchical'                  => true,
+					//         'rewrite'                       => array('slug' => $check[$key1] . '_category'),
+					//         'link_to_post_type'             => false,
+					//         'post_type_link'                => null,
+					//         'has_archive'                   => true
+					//     ),
+
+					// );
 
 					if ( isset($value1) && !empty($value1) ) :
 
