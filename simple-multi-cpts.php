@@ -116,21 +116,6 @@ function simple_multi_cpts_plugin_init(){
         ? apply_filters('simple_multi_cpts_plugin_init', $cpt_supports)[6]
         : [];
 
-    // temp
-    $cpt_supports = array(
-        'title', 
-        'editor',
-        'author',
-        'thumbnail',
-        'excerpt',
-        'trackbacks',
-        'custom-fields',
-        'comments',
-        'revisions',
-        'page-attributes',
-        'post-formats'
-    );
-
 
     if ( class_exists('acf') ) :
 
@@ -141,13 +126,16 @@ function simple_multi_cpts_plugin_init(){
 
             while ( has_sub_field('custom_post_type', 'option') ) :
 
-                $cpt_name[]    = ucfirst( get_sub_field('cpt_name') );
-                $cpt_plural[]  = ucfirst( get_sub_field('cpt_plural') );
-                $rewriteUrl[]  = ucfirst( get_sub_field('rewrite_url') );
-                $cpt_icon[]    = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
+                $cpt_name[]     = ucfirst( get_sub_field('cpt_name') );
+                $cpt_plural[]   = ucfirst( get_sub_field('cpt_plural') );
+                $rewriteUrl[]   = ucfirst( get_sub_field('rewrite_url') );
+                $heirarchial[]  = get_sub_field('enable_heirarchial');
+                $has_archive[]  = get_sub_field('enable_archive');
+                $cpt_supports[] = get_sub_field('supports');
+                $cpt_icon[]     = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
 
-                $cpt_array  = [];
-                $hide_array = [];
+                $cpt_array     = [];
+                $hide_array    = [];
 
                 while ( has_sub_field('cpt_tax', 'option') ) :
 
@@ -174,10 +162,8 @@ function simple_multi_cpts_plugin_init(){
     //  Set globals if constants not defined
     $cpt_slug           = preg_replace("/\W/", "-", array_map('strtolower', $cpt_name) );
 
-    $heirarchial        = true;
-    $has_archive        = true;
-
-
+    // sp($heirarchial);
+    // sp($has_archive);
     // sp($cpt_name);
     // sp($cpt_plural);
     // sp($cpt_tax);

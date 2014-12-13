@@ -91,5 +91,29 @@ https://gist.github.com/kiriaze/f4c4664889a21731fecf
     * Nested forloops not ideal, look at index based comparison of arrays.
 2. Integrate new structure/philosophy into other simple plugins
 
+
+```
+// note: look into passing array differently
+// like so:
+// [camper] => Array
+//     (
+//         [cpt_plural] => Campers
+//         [rewriteUrl] => Hikers
+//         [cpt_tax] => Array
+//             (
+//                 [0] => Level
+//             )
+
+//         [hide] => Array
+//             (
+//                 [0] =>
+//             )
+
+//         [cpt_icon] => \f0fc
+//     )
+
+```
+
+
 ### Beer?
 [Beer me if ya want ;)](https://plasso.co/ckiriaze@gmail.com)

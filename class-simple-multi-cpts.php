@@ -158,11 +158,11 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				            'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
 				        ),
 				        'public'                    => true,
-				        'supports'                  => $cpt_supports,
+				        'supports'                  => $cpt_supports[$count],
 				        'capability_type'           => 'post',
 				        'menu_position'             => '15',
-						'hierarchical'              => $heirarchial,
-						'has_archive'               => $has_archive,
+						'hierarchical'              => $heirarchial[$count],
+						'has_archive'               => $has_archive[$count],
 						'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
 						'taxonomies' 				=> array( 'category', 'post_tag') // this is IMPORTANT
 				    ),
@@ -186,47 +186,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 					$taxonomies[] = array();
 
-					// NOTE: Disabled below, tags/cats that are attached are global, and if unique simply add tax through interface
-
-					// $taxonomies[] = array(
-
-					//     $check[$key1] . '_tag_labels'         => array(
-					//         'object_type'                   => $check[$key1],
-					//         'label'                         => 'Tags',
-					//         'labels'                        => array(
-					//                 'name'                      => 'Tags',
-					//                 'singluar_name'             => 'Tag',
-					//             ),
-					//         'public'                        => true,
-					//         'show_in_nav_menus'             => false,
-					//         'show_ui'                       => true,
-					//         'show_tagcloud'                 => false,
-					//         'hierarchical'                  => true,
-					//         'rewrite'                       => array('slug' => $check[$key1] . '_tag'),
-					//         'link_to_post_type'             => false,
-					//         'post_type_link'                => null,
-					//         'has_archive'                   => true
-					//     ),
-
-					//     $check[$key1] . '_category_labels'    => array(
-					//         'object_type'                   => $check[$key1],
-					//         'label'                         => 'Categories',
-					//         'labels'                        => array(
-					//                 'name'                      => 'Categories',
-					//                 'singluar_name'             => 'Category',
-					//             ),
-					//         'public'                        => true,
-					//         'show_in_nav_menus'             => false,
-					//         'show_ui'                       => true,
-					//         'show_tagcloud'                 => false,
-					//         'hierarchical'                  => true,
-					//         'rewrite'                       => array('slug' => $check[$key1] . '_category'),
-					//         'link_to_post_type'             => false,
-					//         'post_type_link'                => null,
-					//         'has_archive'                   => true
-					//     ),
-
-					// );
+					// NOTE: General Tags/Cats that are attached are global, and if unique simply add tax through interface
 
 					if ( isset($value1) && !empty($value1) ) :
 
