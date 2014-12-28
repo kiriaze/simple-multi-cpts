@@ -136,7 +136,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			foreach ( $cpt_slug as $key => $value ) {
 
 				$check[] = $value;
-				
+
 				if ( isset($rewrite[$count]) ) {
 					$str                		= "$rewrite[$count]";
 					$rewrite[$count]            = ( $rewrite[$count] != 'false' ) ? serialize(array_combine( $fields, explode ( ", ", $str ) )) : 'false';
@@ -389,7 +389,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 				}
 
-
 	        }
 
 			if ( is_array($cpt_tax) ) {
@@ -494,7 +493,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			}
 
-			foreach ($result as $key => $value) {
+			foreach ( $result as $key => $value ) {
 
 				if ( $key == $typenow ) {
 
