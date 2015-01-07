@@ -111,7 +111,7 @@ function simple_multi_cpts_plugin_init(){
         isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5] )
         ? apply_filters('simple_multi_cpts_plugin_init', $cpt_icon)[5]
         : [];
-    $cpt_supports = 
+    $cpt_supports =
         isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_supports)[6] )
         ? apply_filters('simple_multi_cpts_plugin_init', $cpt_supports)[6]
         : [];
@@ -132,10 +132,10 @@ function simple_multi_cpts_plugin_init(){
                 $heirarchial[]  = get_sub_field('enable_heirarchial');
                 $has_archive[]  = get_sub_field('enable_archive');
                 $cpt_supports[] = get_sub_field('supports');
-                $cpt_icon[]     = get_sub_field('cpt_icon') ? '\\' . substr(get_sub_field('cpt_icon'), 3, -1) : '';
+                $cpt_icon[]     = get_sub_field('cpt_icon') ? get_sub_field('cpt_icon') : '';
 
-                $cpt_array     = [];
-                $hide_array    = [];
+                $cpt_array      = [];
+                $hide_array     = [];
 
                 while ( has_sub_field('cpt_tax', 'option') ) :
 

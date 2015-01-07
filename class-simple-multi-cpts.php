@@ -108,7 +108,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		// Load scripts
 		function load_scripts() {
 			wp_enqueue_script( 'admin-simple-multi-cpts-js', plugins_url( 'assets/js/admin.js', __FILE__ ) );
-			wp_enqueue_style( 'admin-simple-multi-cpts', plugins_url( 'advanced-custom-fields-font-awesome-master/better-font-awesome-library/lib/fallback-font-awesome/css/font-awesome.min.css', __DIR__ ) );
+			wp_enqueue_style( 'admin-simple-multi-cpts', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' );
+
 		}
 
 		//  Posttype / Taxonomy Registration
