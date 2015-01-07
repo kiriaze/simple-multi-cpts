@@ -18,23 +18,23 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 	class Simple_Multi_Cpts_Post_Type {
 
-	    function __construct() {
+		function __construct() {
 
-	        //  Grab globals passed from init
-	        global
-	        $cpt_slug,
-	        $cpt_name,
-	        $cpt_plural,
-	        $cpt_tax,
-	        $heirarchial,
-	        $has_archive,
-	        $rewriteUrl,
-	        $hide,
-	        $cpt_icon,
-	        $cpt_supports,
-	        $defaultStyles;
+			//  Grab globals passed from init
+			global
+			$cpt_slug,
+			$cpt_name,
+			$cpt_plural,
+			$cpt_tax,
+			$heirarchial,
+			$has_archive,
+			$rewriteUrl,
+			$hide,
+			$cpt_icon,
+			$cpt_supports,
+			$defaultStyles;
 
-	        //  Set them relative to function
+			//  Set them relative to function
 			$this->cpt_slug      = $cpt_slug;
 			$this->cpt_name      = $cpt_name;
 			$this->cpt_plural    = $cpt_plural;
@@ -47,21 +47,21 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$this->supports		 = $cpt_supports;
 			$this->defaultStyles = $defaultStyles;
 
-	        //  Plugin Activation
-	        register_activation_hook( __FILE__, array( &$this, 'plugin_activation' ) );
+			//  Plugin Activation
+			register_activation_hook( __FILE__, array( &$this, 'plugin_activation' ) );
 
-	        //  Translation
-	        load_plugin_textdomain( 'simple', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+			//  Translation
+			load_plugin_textdomain( 'simple', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
-	        //  Thumbnails
+			//  Thumbnails
 			add_theme_support( 'post-thumbnails' );
 
-	        //  CPT
-	        add_action( 'init', array( &$this, 'cpt_init' ) );
+			//  CPT
+			add_action( 'init', array( &$this, 'cpt_init' ) );
 
 			//  Columns
 			$count = 0;
-	    	foreach ( $cpt_slug as $cpt ) {
+			foreach ( $cpt_slug as $cpt ) {
 				add_filter( 'manage_edit-'.$cpt.'_columns', array( &$this, 'add_cpt_columns') );
 				add_action( 'manage_'.$cpt.'_posts_custom_column', array( &$this, 'display_cpt_columns' ) );
 				add_filter( 'manage_edit-'.$cpt.'_sortable_columns', array( &$this, 'cpt_column_register_sortable' ) );
@@ -80,41 +80,41 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			// Scripts / Styles
 			add_action( 'admin_enqueue_scripts', array( &$this, 'load_scripts' ) );
 
-	    }
+		}
 
-	    //  Flush Rewrite Rules
-	    function plugin_activation() {
-	        flush_rewrite_rules();
-	    }
+		//  Flush Rewrite Rules
+		function plugin_activation() {
+			flush_rewrite_rules();
+		}
 
-	    //  CUSTOM ICON FOR POST TYPE
-	    function cpt_icon() {
-	        $count			= 0;
-	        foreach ( $this->cpt_slug as $key => $value ) {
+		//  CUSTOM ICON FOR POST TYPE
+		function cpt_icon() {
+			$count			= 0;
+			foreach ( $this->cpt_slug as $key => $value ) {
 
 				$icon = !empty($this->icon[$count]) ? $this->icon[$count] : '\f109';
 				$font = !empty($this->icon[$count]) ? 'FontAwesome' : 'dashicons';
 
-		        echo '<style>
-			        #adminmenu #menu-posts-'. $value .' div.wp-menu-image:before {
-		        		font-family: ' . $font . ';
-			            content: "' . $icon . '";
-			        }
-		        </style>';
-		        $count++;
-	        }
-	    }
+				echo '<style>
+					#adminmenu #menu-posts-'. $value .' div.wp-menu-image:before {
+						font-family: ' . $font . ';
+						content: "' . $icon . '";
+					}
+				</style>';
+				$count++;
+			}
+		}
 
-	    // Load scripts
-	    function load_scripts() {
-	        wp_enqueue_script( 'admin-simple-multi-cpts-js', plugins_url( 'assets/js/admin.js', __FILE__ ) );
-	        wp_enqueue_style( 'admin-simple-multi-cpts', plugins_url( 'advanced-custom-fields-font-awesome-master/better-font-awesome-library/lib/fallback-font-awesome/css/font-awesome.min.css', __DIR__ ) );
-	    }
+		// Load scripts
+		function load_scripts() {
+			wp_enqueue_script( 'admin-simple-multi-cpts-js', plugins_url( 'assets/js/admin.js', __FILE__ ) );
+			wp_enqueue_style( 'admin-simple-multi-cpts', plugins_url( 'advanced-custom-fields-font-awesome-master/better-font-awesome-library/lib/fallback-font-awesome/css/font-awesome.min.css', __DIR__ ) );
+		}
 
-	    //  Posttype / Taxonomy Registration
+		//  Posttype / Taxonomy Registration
 		function cpt_init() {
 
-	        // Register cpt / tax
+			// Register cpt / tax
 			$count			= 0;
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
@@ -145,27 +145,27 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 				$post_types[] = array(
 					$value =>  array(
-				        'labels'                    => array(
-				            'name'                      => __( $cpt_plural[$count] ),
-				            'singular_name'             => __( $cpt_name[$count] ),
-				            'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
-				            'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
-				            'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
-				            'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
-				            'view_item'                 => __( 'View ' . $cpt_name[$count] ),
-				            'search_items'              => __( 'Search ' . $cpt_plural[$count] ),
-				            'not_found'                 => __( 'No '. $cpt_plural[$count] . ' found' ),
-				            'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
-				        ),
-				        'public'                    => true,
-				        'supports'                  => $cpt_supports[$count],
-				        'capability_type'           => 'post',
-				        'menu_position'             => '15',
+						'labels'                    => array(
+							'name'                      => __( $cpt_plural[$count] ),
+							'singular_name'             => __( $cpt_name[$count] ),
+							'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
+							'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
+							'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
+							'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
+							'view_item'                 => __( 'View ' . $cpt_name[$count] ),
+							'search_items'              => __( 'Search ' . $cpt_plural[$count] ),
+							'not_found'                 => __( 'No '. $cpt_plural[$count] . ' found' ),
+							'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
+						),
+						'public'                    => true,
+						'supports'                  => $cpt_supports[$count],
+						'capability_type'           => 'post',
+						'menu_position'             => '15',
 						'hierarchical'              => $heirarchial[$count],
 						'has_archive'               => $has_archive[$count],
 						'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
 						'taxonomies' 				=> array( 'category', 'post_tag') // this is IMPORTANT
-				    ),
+					),
 				);
 
 				$count++;
@@ -267,51 +267,51 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			if ( $post_types ) {
 				foreach ( $post_types as $post_type ) {
 					foreach ( $post_type as $key => $value ) {
-				    	register_post_type( $key, $value );
+						register_post_type( $key, $value );
 					}
 				}
 			}
 
 			// taxes
-	        global $association_array;
-	        $association_array = array();
+			global $association_array;
+			$association_array = array();
 
-	        if ( $taxonomies ) {
+			if ( $taxonomies ) {
 
-		        foreach ( $taxonomies as $taxonomy ) {
+				foreach ( $taxonomies as $taxonomy ) {
 
-		        	foreach ( $taxonomy as $key => $value ) {
+					foreach ( $taxonomy as $key => $value ) {
 
-			            register_taxonomy( $key, $value['object_type'], $value );
+						register_taxonomy( $key, $value['object_type'], $value );
 
-			            if ( $value['link_to_post_type'] ) {
-			            	$association_array[$taxonomy] = $value['post_type_link'];
-			            }
+						if ( $value['link_to_post_type'] ) {
+							$association_array[$taxonomy] = $value['post_type_link'];
+						}
 
-		        	}
+					}
 
-		        }
+				}
 
-	        }
+			}
 
-	    }
+		}
 
-	    //  Add Columns
-	    function add_cpt_columns( $columns ) {
+		//  Add Columns
+		function add_cpt_columns( $columns ) {
 
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 			$hide			= $this->hide;
 
-	        $columns = array(
+			$columns = array(
 				'cb'                         => '<input type="checkbox" />',
 				'title'                      => __( 'Name' ),
 				'thumbnail'                  => __( 'Thumbnail' ),
-	        );
+			);
 
-			$columns[ get_post_type() . '_categories'] = __( 'Categories');
-			$columns[ get_post_type() . '_tags']       = __( 'Tags');
+			// $columns['categories'] = __( 'Categories');
+			// $columns['tags']       = __( 'Tags');
 
 			// cleaner structure 11.25.14
 			$result = array();
@@ -348,48 +348,48 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			$columns['date']       = __( 'Date' );
 
-	        return $columns;
+			return $columns;
 
-	    }
+		}
 
-	    //  Add data to column
-	    function display_cpt_columns( $column ) {
+		//  Add data to column
+		function display_cpt_columns( $column ) {
 
-	        global $post;
+			global $post;
 
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-	        if ( $column == 'thumbnail' ) {
+			if ( $column == 'thumbnail' ) {
 				$thumb = get_the_post_thumbnail( $post->ID, array(35, 35) );
 				echo $thumb;
-	        }
+			}
 
-	        foreach ( $cpt_slug as $cpt_slug ) {
+			// foreach ( $cpt_slug as $cpt_slug ) {
 
-	        	if ( $column == $cpt_slug . '_categories' ) {
+			// 	if ( $column == 'categories' ) {
 
-					$args = array(
-						'taxonomy' => $cpt_slug . '_category_labels',
-						'postID'   => $post->ID
-					);
+			// 		$args = array(
+			// 			'taxonomy' => 'category',
+			// 			'postID'   => $post->ID
+			// 			);
 
-					do_action('simple_list_terms', $args);
-	        	}
+			// 		do_action('simple_list_terms', $args);
+			// 	}
 
-				if ( $column == $cpt_slug . '_tags' ) {
+			// 	if ( $column == 'tags' ) {
 
-					$args = array(
-						'taxonomy' => $cpt_slug . '_tag_labels',
-						'postID'   => $post->ID
-					);
+			// 		$args = array(
+			// 			'taxonomy' => 'post_tag',
+			// 			'postID'   => $post->ID
+			// 			);
 
-					do_action('simple_list_terms', $args);
+			// 		do_action('simple_list_terms', $args);
 
-				}
+			// 	}
 
-	        }
+			// }
 
 			if ( is_array($cpt_tax) ) {
 
@@ -400,8 +400,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						if ( $column == $value ) :
 
 							$args = array(
-								'taxonomy' => strtolower($value),
-								'postID'   => $post->ID
+								'taxonomy' => preg_replace( "/\W/", "_", strtolower($value) ),
+								'postID'   => $post->ID,
 							);
 
 							do_action('simple_list_terms', $args);
@@ -415,8 +415,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 							if ( $column == $value ) :
 
 								$args = array(
-									'taxonomy' => strtolower($value),
-									'postID'   => $post->ID
+									'taxonomy' => preg_replace( "/\W/", "_", strtolower($value) ),
+									'postID'   => $post->ID,
 								);
 
 								do_action('simple_list_terms', $args);
@@ -431,19 +431,19 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			}
 
-	    }
+		}
 
-	    //  Register the column as sortable
-	    function cpt_column_register_sortable( $columns ) {
+		//  Register the column as sortable
+		function cpt_column_register_sortable( $columns ) {
 
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-	        foreach ( $cpt_slug as $cpt_slug ) {
-		        $columns[$cpt_slug . '_categories']  	= $cpt_slug . '_categories';
-		        $columns[$cpt_slug . '_tags']        	= $cpt_slug . '_tags';
-	        }
+			// foreach ( $cpt_slug as $cpt_slug ) {
+			// 	$columns['categories']  	= 'categories';
+			// 	$columns['tags']        	= 'tags';
+			// }
 
 			if ( is_array($cpt_tax) ) {
 
@@ -465,18 +465,18 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			}
 
-	        $columns['thumbnail']   					= 'thumbnail';
+			$columns['thumbnail']   					= 'thumbnail';
 
-	        return $columns;
+			return $columns;
 
-	    }
+		}
 
-	    //  Add Tax Filter Dropdowns to the Admin - http://pippinsplugins.com
-	    function add_taxonomy_filters() {
+		//  Add Tax Filter Dropdowns to the Admin - http://pippinsplugins.com
+		function add_taxonomy_filters() {
 
-	        global $typenow, $taxonomies;
+			global $typenow, $taxonomies;
 
-	        $count			= 0;
+			$count			= 0;
 			$cpt_slug		= $this->cpt_slug;
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
@@ -505,27 +505,27 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 							if ( $value ) {
 
-								$termSlug = strtolower($value);
+								$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
 
 								$current_tax = isset( $_GET[$termSlug] ) ? $_GET[$termSlug] : false;
 
 								$termArgs = array(
 									'hide_empty' => 0,
-									'post_type' => $typenow,
+									'post_type'  => $typenow,
 								);
 
 								$terms = get_terms($termSlug, $termArgs);
 
 								if ( count( $terms ) > 0 ) {
 
-								    echo "<select name='".$termSlug."' id='".$termSlug."' class='postform'>";
-								    echo "<option value=''>View all ".$value."</option>";
+									echo "<select name='".$termSlug."' id='".$termSlug."' class='postform'>";
+									echo "<option value=''>View all ".$value."</option>";
 
-								    foreach ( $terms as $term ) {
+									foreach ( $terms as $term ) {
 										echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
-								    }
+									}
 
-								    echo "</select>";
+									echo "</select>";
 								}
 
 							}
@@ -538,7 +538,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			}
 
-	    }
+		}
 
 	}
 
