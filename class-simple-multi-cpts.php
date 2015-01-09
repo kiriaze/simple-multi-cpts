@@ -207,7 +207,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 											'singluar_name'             => substr_replace( $tax_name .'s', "", -1 ),
 										),
 									'public'                        => true,
-									'show_in_nav_menus'             => false,
+									'show_in_nav_menus'             => true,
+									'show_admin_column'             => true,
 									'show_ui'                       => true,
 									'show_tagcloud'                 => false,
 									'hierarchical'                  => true,
@@ -238,7 +239,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 												'singluar_name'             => substr_replace( $tax_name .'s', "", -1 ),
 											),
 										'public'                        => true,
-										'show_in_nav_menus'             => false,
+										'show_in_nav_menus'             => true,
+										'show_admin_column'             => true,
 										'show_ui'                       => true,
 										'show_tagcloud'                 => false,
 										'hierarchical'                  => true,
@@ -305,51 +307,14 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_tax		= $this->cpt_tax;
 			$hide			= $this->hide;
 
-			$columns = array(
-				'cb'                         => '<input type="checkbox" />',
-				'title'                      => __( 'Name' ),
-				'thumbnail'                  => __( 'Thumbnail' ),
-			);
-
-			// $columns['categories'] = __( 'Categories');
-			// $columns['tags']       = __( 'Tags');
-
-			// cleaner structure 11.25.14
-			$result = array();
-
-			foreach ( $cpt_slug as $key => $value ) {
-				$result[$value] = array(
-					'cpt_tax' => $cpt_tax[$key],
-					'hide'    => $hide[$key],
-				);
+			foreach ( $columns as $key => $title ) {
+				
+				if ( $key=='title' ) // Put the Thumbnail column before the title column
+					$new_columns['thumbnail'] = 'Thumbnail';
+					$new_columns[$key] = $title;
 			}
 
-			$count = 0;
-
-			foreach ( $result as $key => $value ) {
-
-				if ( $key == get_post_type() ) {
-
-					$hide = $value['hide'];
-
-					foreach ( $value['cpt_tax'] as $key2 => $value2 ) {
-						$columns[$cpt_tax[$count][$key2]] = __( ucfirst($cpt_tax[$count][$key2]) );
-					}
-
-					foreach ( $hide as $key3 => $value3 ) {
-						if ( $value3 ) {
-							unset($columns[$cpt_tax[$count][$key3]]);
-						}
-					}
-
-				}
-
-				$count++;
-			}
-
-			$columns['date']       = __( 'Date' );
-
-			return $columns;
+			return $new_columns;
 
 		}
 
@@ -367,71 +332,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				echo $thumb;
 			}
 
-			// foreach ( $cpt_slug as $cpt_slug ) {
-
-			// 	if ( $column == 'categories' ) {
-
-			// 		$args = array(
-			// 			'taxonomy' => 'category',
-			// 			'postID'   => $post->ID
-			// 			);
-
-			// 		do_action('simple_list_terms', $args);
-			// 	}
-
-			// 	if ( $column == 'tags' ) {
-
-			// 		$args = array(
-			// 			'taxonomy' => 'post_tag',
-			// 			'postID'   => $post->ID
-			// 			);
-
-			// 		do_action('simple_list_terms', $args);
-
-			// 	}
-
-			// }
-
-			if ( is_array($cpt_tax) ) {
-
-				foreach ( $cpt_tax as $key => $value ) {
-
-					if ( !is_array($value) ) {
-
-						if ( $column == $value ) :
-
-							$args = array(
-								'taxonomy' => preg_replace( "/\W/", "_", strtolower($value) ),
-								'postID'   => $post->ID,
-							);
-
-							do_action('simple_list_terms', $args);
-
-						endif;
-
-					} else {
-
-						foreach ( $value as $key => $value ) {
-
-							if ( $column == $value ) :
-
-								$args = array(
-									'taxonomy' => preg_replace( "/\W/", "_", strtolower($value) ),
-									'postID'   => $post->ID,
-								);
-
-								do_action('simple_list_terms', $args);
-
-							endif;
-
-						}
-
-					}
-
-				}
-
-			}
-
 		}
 
 		//  Register the column as sortable
@@ -441,23 +341,20 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_name		= $this->cpt_name;
 			$cpt_tax		= $this->cpt_tax;
 
-			// foreach ( $cpt_slug as $cpt_slug ) {
-			// 	$columns['categories']  	= 'categories';
-			// 	$columns['tags']        	= 'tags';
-			// }
-
 			if ( is_array($cpt_tax) ) {
 
 				foreach ( $cpt_tax as $key => $value ) {
 
 					if ( !is_array($value) ) {
 
-						$columns[$value] = __( ucfirst($value) );
+						$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
+						$columns['taxonomy-' . $termSlug ] = 'taxonomy-' . $termSlug;
 
 					} else {
-
+						
 						foreach ( $value as $key => $value ) {
-							$columns[$value] = __( ucfirst($value) );
+							$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
+							$columns['taxonomy-' . $termSlug ] = 'taxonomy-' . $termSlug;
 						}
 
 					}
@@ -475,69 +372,124 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		//  Add Tax Filter Dropdowns to the Admin - http://pippinsplugins.com
 		function add_taxonomy_filters() {
 
-			global $typenow, $taxonomies;
+			// auto generate all taxes
+			global $typenow;
 
-			$count			= 0;
-			$cpt_slug		= $this->cpt_slug;
-			$cpt_name		= $this->cpt_name;
-			$cpt_tax		= $this->cpt_tax;
-			$hide			= $this->hide;
+			$args        = array( 'public' => true, '_builtin' => false );
+			$post_types  = get_post_types($args);
 
-			$result			= array();
 
-			foreach ( $cpt_slug as $key => $value ) {
+			// custom function fix for getting terms tied to post types for add_taxonomy_filters
+			function get_terms_by_post_type( $taxonomies, $post_types ) {
 
-				$result[$value] = array(
-					'cpt_tax' => $cpt_tax[$key],
-					'hide'    => $hide[$key],
-				);
+				global $wpdb;
+
+				$query = $wpdb->prepare(
+					"SELECT t.*, count from $wpdb->terms AS t
+					INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
+					INNER JOIN $wpdb->term_relationships AS r ON r.term_taxonomy_id = tt.term_taxonomy_id
+					INNER JOIN $wpdb->posts AS p ON p.ID = r.object_id
+					WHERE p.post_type IN('%s') AND tt.taxonomy IN('%s')
+					GROUP BY t.term_id",
+					join( "', '", $post_types ),
+					join( "', '", $taxonomies )
+					);
+
+				$results = $wpdb->get_results( $query );
+
+				return $results;
 
 			}
 
-			foreach ( $result as $key => $value ) {
+			if ( in_array( $typenow, $post_types ) ) {
 
-				if ( $key == $typenow ) {
+				$filters = get_object_taxonomies($typenow);
 
-					foreach ( $result[$key] as $tax  ) {
+				foreach ( $filters as $tax_slug ) {
 
-						if ( is_array($tax) )
+					$tax_obj     = get_taxonomy($tax_slug);
+					$current_tax = isset( $_GET[$tax_slug] ) ? $_GET[$tax_slug] : false;
 
-						foreach ( $tax as $key => $value ) {
+					$terms       = get_terms_by_post_type(array($tax_slug), array($typenow));
 
-							if ( $value ) {
+					if ( count( $terms ) > 0 ) {
+						echo "<select name='".$tax_obj->name."' id='".$tax_obj->name."' class='postform'>";
+						echo "<option value=''>View all ".$tax_obj->label."</option>";
 
-								$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
-
-								$current_tax = isset( $_GET[$termSlug] ) ? $_GET[$termSlug] : false;
-
-								$termArgs = array(
-									'hide_empty' => 0,
-									'post_type'  => $typenow,
-								);
-
-								$terms = get_terms($termSlug, $termArgs);
-
-								if ( count( $terms ) > 0 ) {
-
-									echo "<select name='".$termSlug."' id='".$termSlug."' class='postform'>";
-									echo "<option value=''>View all ".$value."</option>";
-
-									foreach ( $terms as $term ) {
-										echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
-									}
-
-									echo "</select>";
-								}
-
-							}
-
+						foreach ( $terms as $term ) {
+							sp($term);
+							echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
 						}
 
+						echo "</select>";
 					}
 
 				}
-
 			}
+
+			// global $typenow, $taxonomies;
+
+			// $count			= 0;
+			// $cpt_slug		= $this->cpt_slug;
+			// $cpt_name		= $this->cpt_name;
+			// $cpt_tax		= $this->cpt_tax;
+			// $hide			= $this->hide;
+
+			// $result			= array();
+
+			// foreach ( $cpt_slug as $key => $value ) {
+
+			// 	$result[$value] = array(
+			// 		'cpt_tax' => $cpt_tax[$key],
+			// 		'hide'    => $hide[$key],
+			// 	);
+
+			// }
+
+			// foreach ( $result as $key => $value ) {
+
+			// 	if ( $key == $typenow ) {
+
+			// 		foreach ( $result[$key] as $tax  ) {
+
+			// 			if ( is_array($tax) )
+
+			// 			foreach ( $tax as $key => $value ) {
+
+			// 				if ( $value ) {
+
+			// 					$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
+
+			// 					$current_tax = isset( $_GET[$termSlug] ) ? $_GET[$termSlug] : false;
+
+			// 					$termArgs = array(
+			// 						'hide_empty' => 0,
+			// 						'post_type'  => $typenow,
+			// 					);
+
+			// 					$terms = get_terms($termSlug, $termArgs);
+
+			// 					if ( count( $terms ) > 0 ) {
+
+			// 						echo "<select name='".$termSlug."' id='".$termSlug."' class='postform'>";
+			// 						echo "<option value=''>View all ".$value."</option>";
+
+			// 						foreach ( $terms as $term ) {
+			// 							echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
+			// 						}
+
+			// 						echo "</select>";
+			// 					}
+
+			// 				}
+
+			// 			}
+
+			// 		}
+
+			// 	}
+
+			// }
 
 		}
 
