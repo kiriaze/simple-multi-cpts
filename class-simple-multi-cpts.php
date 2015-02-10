@@ -417,7 +417,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						echo "<option value=''>View all ".$tax_obj->label."</option>";
 
 						foreach ( $terms as $term ) {
-							sp($term);
+							// sp($term);
 							echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
 						}
 
