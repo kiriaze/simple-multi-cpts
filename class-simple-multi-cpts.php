@@ -165,6 +165,9 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						'hierarchical'              => $heirarchial[$count],
 						'has_archive'               => $has_archive[$count],
 						'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
+						'show_in_rest'              => true,
+						'rest_base'                 => $cpt_slug . '-api',
+						'rest_controller_class'     => 'WP_REST_Posts_Controller',
 						'taxonomies' 				=> array( 'category', 'post_tag') // this is IMPORTANT
 					),
 				);
@@ -217,7 +220,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 									),
 									'link_to_post_type'             => false,
 									'post_type_link'                => null,
-									'has_archive'                   => true
+									'has_archive'                   => true,
+									'show_in_rest'                  => true,
+									'rest_base'                     => preg_replace("/\W/", "-", strtolower($value1) ),
+									'rest_controller_class'         => 'WP_REST_Terms_Controller'
 								)
 							);
 
@@ -249,7 +255,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 										),
 										'link_to_post_type'             => false,
 										'post_type_link'                => null,
-										'has_archive'                   => true
+										'has_archive'                   => true,
+										'show_in_rest'                  => true,
+										'rest_base'                     => preg_replace("/\W/", "-", strtolower($value2) ),
+										'rest_controller_class'         => 'WP_REST_Terms_Controller'
 									)
 								);
 
@@ -413,6 +422,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 					$terms       = get_terms_by_post_type(array($tax_slug), array($typenow));
 
 					if ( count( $terms ) > 0 ) {
+
 						echo "<select name='".$tax_obj->name."' id='".$tax_obj->name."' class='postform'>";
 						echo "<option value=''>View all ".$tax_obj->label."</option>";
 
