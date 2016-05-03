@@ -166,8 +166,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						'has_archive'               => $has_archive[$count],
 						'rewrite'                   => isset($rewrite[$count]) ? $rewrite[$count] : '',
 						'show_in_rest'              => true,
-						'rest_base'                 => $cpt_slug . '-api',
-						'rest_controller_class'     => 'WP_REST_Posts_Controller',
+						// 'rest_base'                 => $cpt_slug . '-api',
+						// 'rest_controller_class'     => '',
 						'taxonomies' 				=> array( 'category', 'post_tag') // this is IMPORTANT
 					),
 				);
@@ -222,8 +222,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 									'post_type_link'                => null,
 									'has_archive'                   => true,
 									'show_in_rest'                  => true,
-									'rest_base'                     => preg_replace("/\W/", "-", strtolower($value1) ),
-									'rest_controller_class'         => 'WP_REST_Terms_Controller'
+									// 'rest_base'                     => preg_replace("/\W/", "-", strtolower($value1) ),
+									// 'rest_controller_class'         => 'WP_REST_Terms_Controller'
 								)
 							);
 
@@ -257,8 +257,8 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 										'post_type_link'                => null,
 										'has_archive'                   => true,
 										'show_in_rest'                  => true,
-										'rest_base'                     => preg_replace("/\W/", "-", strtolower($value2) ),
-										'rest_controller_class'         => 'WP_REST_Terms_Controller'
+										// 'rest_base'                     => preg_replace("/\W/", "-", strtolower($value2) ),
+										// 'rest_controller_class'         => 'WP_REST_Terms_Controller'
 									)
 								);
 
