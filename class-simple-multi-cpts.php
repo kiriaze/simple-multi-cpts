@@ -125,7 +125,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_tax		= $this->cpt_tax;
 			$hide			= $this->hide;
 			$cpt_supports	= $this->supports;
-			$post_types		= '';
+			$post_types		= [];
 			$taxonomies		= '';
 
 			//  Rewrite checking values and serializing rewrite array
@@ -317,7 +317,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$hide			= $this->hide;
 
 			foreach ( $columns as $key => $title ) {
-				
+
 				if ( $key=='title' ) // Put the Thumbnail column before the title column
 					$new_columns['thumbnail'] = 'Thumbnail';
 					$new_columns[$key] = $title;
@@ -360,7 +360,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						$columns['taxonomy-' . $termSlug ] = 'taxonomy-' . $termSlug;
 
 					} else {
-						
+
 						foreach ( $value as $key => $value ) {
 							$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
 							$columns['taxonomy-' . $termSlug ] = 'taxonomy-' . $termSlug;
