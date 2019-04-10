@@ -113,7 +113,3 @@ https://gist.github.com/kiriaze/f4c4664889a21731fecf
 //     )
 
 ```
-
-
-### Beer?
-[Beer me if ya want ;)](https://plasso.co/ckiriaze@gmail.com)
