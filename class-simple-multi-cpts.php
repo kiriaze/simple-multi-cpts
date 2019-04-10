@@ -11,7 +11,6 @@
 *
 */
 
-
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
@@ -23,9 +22,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			//  Grab globals passed from init
 			global
 			$cpt_slug,
+			$cpt_name_singular,
 			$cpt_name,
-			$cpt_plural,
 			$cpt_tax,
+			$cpt_tax_singular,
 			$cats_and_tags,
 			$heirarchial,
 			$has_archive,
@@ -36,18 +36,19 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$defaultStyles;
 
 			//  Set them relative to function
-			$this->cpt_slug      = $cpt_slug;
-			$this->cpt_name      = $cpt_name;
-			$this->cpt_plural    = $cpt_plural;
-			$this->cpt_tax       = $cpt_tax;
-			$this->cats_and_tags = $cats_and_tags;
-			$this->heirarchial   = $heirarchial;
-			$this->has_archive   = $has_archive;
-			$this->rewrite       = $rewriteUrl;
-			$this->hide          = $hide;
-			$this->icon			 = $cpt_icon;
-			$this->supports		 = $cpt_supports;
-			$this->defaultStyles = $defaultStyles;
+			$this->cpt_slug          = $cpt_slug;
+			$this->cpt_name_singular = $cpt_name_singular;
+			$this->cpt_name          = $cpt_name;
+			$this->cpt_tax           = $cpt_tax;
+			$this->cpt_tax_singular  = $cpt_tax_singular;
+			$this->cats_and_tags     = $cats_and_tags;
+			$this->heirarchial       = $heirarchial;
+			$this->has_archive       = $has_archive;
+			$this->rewrite           = $rewriteUrl;
+			$this->hide              = $hide;
+			$this->icon              = $cpt_icon;
+			$this->supports          = $cpt_supports;
+			$this->defaultStyles     = $defaultStyles;
 
 			//  Plugin Activation
 			register_activation_hook( __FILE__, array( &$this, 'plugin_activation' ) );
@@ -56,7 +57,9 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			load_plugin_textdomain( 'simple', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 			//  Thumbnails
-			add_theme_support( 'post-thumbnails' );
+			if ( in_array( 'thumbnail', $this->supports ) ) {
+				add_theme_support( 'post-thumbnails' );
+			}
 
 			//  CPT
 			add_action( 'init', array( &$this, 'cpt_init' ) );
@@ -118,24 +121,25 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		function cpt_init() {
 
 			// Register cpt / tax
-			$count			= 0;
-			$cpt_slug		= $this->cpt_slug;
-			$cpt_name		= $this->cpt_name;
-			$cpt_plural		= $this->cpt_plural;
-			$heirarchial	= $this->heirarchial;
-			$has_archive	= $this->has_archive;
-			$cpt_tax		= $this->cpt_tax;
-			$hide			= $this->hide;
-			$cpt_supports	= $this->supports;
-			$post_types		= [];
-			$taxonomies		= '';
-			$cats_and_tags  = $this->cats_and_tags;
+			$count             = 0;
+			$cpt_slug          = $this->cpt_slug;
+			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_name          = $this->cpt_name;
+			$heirarchial       = $this->heirarchial;
+			$has_archive       = $this->has_archive;
+			$cpt_tax           = $this->cpt_tax;
+			$cpt_tax_singular  = $this->cpt_tax_singular;
+			$hide              = $this->hide;
+			$cpt_supports      = $this->supports;
+			$post_types        = [];
+			$taxonomies        = '';
+			$cats_and_tags     = $this->cats_and_tags;
 
 			//  Rewrite checking values and serializing rewrite array
 			$rewrite		= $this->rewrite;
-			$fields			= array( 'slug' );
+			$fields			= ['slug'];
 
-			$check = array();
+			$check = [];
 
 			foreach ( $cpt_slug as $key => $value ) {
 
@@ -150,16 +154,16 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				$post_types[] = array(
 					$value =>  array(
 						'labels'                    => array(
-							'name'                      => __( $cpt_plural[$count] ),
-							'singular_name'             => __( $cpt_name[$count] ),
-							'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
-							'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
-							'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
-							'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
-							'view_item'                 => __( 'View ' . $cpt_name[$count] ),
-							'search_items'              => __( 'Search ' . $cpt_plural[$count] ),
-							'not_found'                 => __( 'No '. $cpt_plural[$count] . ' found' ),
-							'not_found_in_trash'        => __( 'No '. $cpt_plural[$count] . ' found in trash' )
+							'name'                      => __( $cpt_name[$count] ),
+							'singular_name'             => __( $cpt_name_singular[$count] ),
+							'add_new'                   => __( 'Add New ' . $cpt_name_singular[$count] ),
+							'add_new_item'              => __( 'Add New ' . $cpt_name_singular[$count] ),
+							'edit_item'                 => __( 'Edit ' . $cpt_name_singular[$count] ),
+							'new_item'                  => __( 'Add New ' . $cpt_name_singular[$count] ),
+							'view_item'                 => __( 'View ' . $cpt_name_singular[$count] ),
+							'search_items'              => __( 'Search ' . $cpt_name[$count] ),
+							'not_found'                 => __( 'No '. $cpt_name[$count] . ' found' ),
+							'not_found_in_trash'        => __( 'No '. $cpt_name[$count] . ' found in trash' )
 						),
 						'public'                    => true,
 						'supports'                  => $cpt_supports[$count],
@@ -189,11 +193,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 					// taxes
 					global $taxonomies;
 
-					// sp($key1);
-					// sp($check[$key1]);
-
-					$tax_name = ucfirst($check[$key1]);
-
 					$taxonomies[] = array();
 
 					// NOTE: General Tags/Cats that are attached are global, and if unique simply add tax through interface
@@ -202,28 +201,41 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 						if ( !is_array($value1) ) :
 
-							$label    = preg_replace("/\W/", "_", strtolower($value1) );
-							$tax_name = ucfirst($value1);
-
-							// sp($value1);
+							$label             = preg_replace("/\W/", "_", strtolower($value1) );
+							$tax_name          = ucfirst($value1);
+							$tax_name_singular = ucfirst($cpt_tax_singular[$key1]);
 
 							$custom_tax[] = array(
 								$label    => array(
-										'object_type'                   => $check[$key1],
-										'label'                         => $tax_name,
-										'labels'                        => array(
-											'name'                      => $tax_name,
-											'singluar_name'             => substr_replace( $tax_name .'s', "", -1 ),
-										),
+									'object_type'                   => $check[$key1],
+									'label'                         => $tax_name,
+									'labels'                        => [
+										'name'                      => $tax_name,
+										'singluar_name'             => $tax_name_singular,
+										
+										'edit_item'                  => 'Edit ' . $tax_name_singular,
+										'update_item'                => 'Update  ' . $tax_name_singular,
+										'add_new_item'               => 'Add New ' . $tax_name_singular,
+										
+										'new_item_name'              => 'New '. $tax_name_singular .' Name',
+										'menu_name'                  => $tax_name,
+										'search_items'               => 'Search ' . $tax_name,
+										'popular_items'              => 'Popular ' . $tax_name,
+										'all_items'                  => 'All ' . $tax_name,
+										'separate_items_with_commas' => 'Separate '. $tax_name .' with commas',
+										'add_or_remove_items'        => 'Add or remove '. $tax_name .'',
+										'choose_from_most_used'      => 'Choose from the most used '. $tax_name .'',
+										'not_found'                  => 'No '. $tax_name .' found.',
+									],
 									'public'                        => true,
 									'show_in_nav_menus'             => true,
 									'show_admin_column'             => true,
 									'show_ui'                       => true,
 									'show_tagcloud'                 => false,
 									'hierarchical'                  => true,
-									'rewrite'                       => array(
+									'rewrite'                       => [
 										'slug' => preg_replace("/\W/", "-", strtolower($value1) )
-									),
+									],
 									'link_to_post_type'             => false,
 									'post_type_link'                => null,
 									'has_archive'                   => true,
@@ -237,28 +249,41 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 							foreach ( $value1 as $key => $value2 ) {
 
-								$label    = preg_replace("/\W/", "_", strtolower($value2) );
-								$tax_name = ucfirst($value2);
-
-								// sp($value2);
+								$label             = preg_replace("/\W/", "_", strtolower($value2) );
+								$tax_name          = ucfirst($value2);
+								$tax_name_singular = ucfirst($cpt_tax_singular[$key1][$key]);
 
 								$custom_tax[] = array(
 									$label    => array(
-											'object_type'                   => $check[$key1],
-											'label'                         => $tax_name,
-											'labels'                        => array(
-												'name'                      => $tax_name,
-												'singluar_name'             => substr_replace( $tax_name .'s', "", -1 ),
-											),
+										'object_type'                   => $check[$key1],
+										'label'                         => $tax_name,
+										'labels'                        => [
+											'name'                       => $tax_name,
+											'singluar_name'              => $tax_name_singular,
+											
+											'edit_item'                  => 'Edit ' . $tax_name_singular,
+											'update_item'                => 'Update  ' . $tax_name_singular,
+											'add_new_item'               => 'Add New ' . $tax_name_singular,
+											
+											'new_item_name'              => 'New '. $tax_name_singular .' Name',
+											'menu_name'                  => $tax_name,
+											'search_items'               => 'Search ' . $tax_name,
+											'popular_items'              => 'Popular ' . $tax_name,
+											'all_items'                  => 'All ' . $tax_name,
+											'separate_items_with_commas' => 'Separate '. $tax_name .' with commas',
+											'add_or_remove_items'        => 'Add or remove '. $tax_name .'',
+											'choose_from_most_used'      => 'Choose from the most used '. $tax_name .'',
+											'not_found'                  => 'No '. $tax_name .' found.',
+										],
 										'public'                        => true,
 										'show_in_nav_menus'             => true,
 										'show_admin_column'             => true,
 										'show_ui'                       => true,
 										'show_tagcloud'                 => false,
 										'hierarchical'                  => true,
-										'rewrite'                       => array(
+										'rewrite'                       => [
 											'slug' => preg_replace("/\W/", "-", strtolower($value2) )
-										),
+										],
 										'link_to_post_type'             => false,
 										'post_type_link'                => null,
 										'has_archive'                   => true,
@@ -317,16 +342,25 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		//  Add Columns
 		function add_cpt_columns( $columns ) {
 
-			$cpt_slug		= $this->cpt_slug;
-			$cpt_name		= $this->cpt_name;
-			$cpt_tax		= $this->cpt_tax;
-			$hide			= $this->hide;
+			$cpt_slug          = $this->cpt_slug;
+			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_tax           = $this->cpt_tax;
+			$hide              = $this->hide;
+			$cpt_supports      = $this->supports;
+
+			// get the index in array that matches post type name
+			$cpt_index         = array_search(ucfirst($_GET['post_type']), $this->cpt_name);
 
 			foreach ( $columns as $key => $title ) {
-
-				if ( $key=='title' ) // Put the Thumbnail column before the title column
-					$new_columns['thumbnail'] = 'Thumbnail';
-					$new_columns[$key] = $title;
+				// Put the Thumbnail column before the title column
+				if ( in_array( 'thumbnail', $cpt_supports[$cpt_index] ) ) {
+					if ( $key == 'title' ) {
+						$new_columns['thumbnail'] = 'Thumbnail';
+					}
+				} else {
+					unset($new_columns['thumbnail']);
+				}
+				$new_columns[$key] = $title;
 			}
 
 			return $new_columns;
@@ -338,13 +372,19 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			global $post;
 
-			$cpt_slug		= $this->cpt_slug;
-			$cpt_name		= $this->cpt_name;
-			$cpt_tax		= $this->cpt_tax;
+			$cpt_slug          = $this->cpt_slug;
+			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_tax           = $this->cpt_tax;
+			$cpt_supports      = $this->supports;
 
-			if ( $column == 'thumbnail' ) {
-				$thumb = get_the_post_thumbnail( $post->ID, array(35, 35) );
-				echo $thumb;
+			// get the index in array that matches post type name
+			$cpt_index         = array_search(ucfirst($_GET['post_type']), $this->cpt_name);
+
+			if ( in_array( 'thumbnail', $cpt_supports[$cpt_index] ) ) {
+				if ( $column == 'thumbnail' ) {
+					$thumb = get_the_post_thumbnail( $post->ID, array(35, 35) );
+					echo $thumb;
+				}
 			}
 
 		}
@@ -352,9 +392,13 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		//  Register the column as sortable
 		function cpt_column_register_sortable( $columns ) {
 
-			$cpt_slug		= $this->cpt_slug;
-			$cpt_name		= $this->cpt_name;
-			$cpt_tax		= $this->cpt_tax;
+			$cpt_slug          = $this->cpt_slug;
+			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_tax           = $this->cpt_tax;
+			$cpt_supports      = $this->supports;
+
+			// get the index in array that matches post type name
+			$cpt_index         = array_search(ucfirst($_GET['post_type']), $this->cpt_name);
 
 			if ( is_array($cpt_tax) ) {
 
@@ -378,13 +422,15 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			}
 
-			$columns['thumbnail']   					= 'thumbnail';
+			if ( in_array( 'thumbnail', $cpt_supports[$cpt_index] ) ) {
+				$columns['thumbnail'] = 'thumbnail';
+			}
 
 			return $columns;
 
 		}
 
-		//  Add Tax Filter Dropdowns to the Admin - http://pippinsplugins.com
+		//  Add Tax Filter Dropdowns to the Admin
 		function add_taxonomy_filters() {
 
 			// auto generate all taxes
@@ -408,7 +454,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 					GROUP BY t.term_id",
 					join( "', '", $post_types ),
 					join( "', '", $taxonomies )
-					);
+				);
 
 				$results = $wpdb->get_results( $query );
 
