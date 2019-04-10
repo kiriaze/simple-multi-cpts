@@ -26,6 +26,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_name,
 			$cpt_plural,
 			$cpt_tax,
+			$cats_and_tags,
 			$heirarchial,
 			$has_archive,
 			$rewriteUrl,
@@ -39,6 +40,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$this->cpt_name      = $cpt_name;
 			$this->cpt_plural    = $cpt_plural;
 			$this->cpt_tax       = $cpt_tax;
+			$this->cats_and_tags = $cats_and_tags;
 			$this->heirarchial   = $heirarchial;
 			$this->has_archive   = $has_archive;
 			$this->rewrite       = $rewriteUrl;
@@ -127,6 +129,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			$cpt_supports	= $this->supports;
 			$post_types		= [];
 			$taxonomies		= '';
+			$cats_and_tags  = $this->cats_and_tags;
 
 			//  Rewrite checking values and serializing rewrite array
 			$rewrite		= $this->rewrite;
@@ -168,7 +171,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 						'show_in_rest'              => true,
 						// 'rest_base'                 => $cpt_slug . '-api',
 						// 'rest_controller_class'     => '',
-						'taxonomies' 				=> array( 'category', 'post_tag') // this is IMPORTANT
+
+						// this is IMPORTANT if we want the cpt to use the default post type cats/tags 
+						// leave empty val if we dont want the cpt to have cats/tags
+						'taxonomies' 				=> empty($cats_and_tags[$count]) ? [] : ['category', 'post_tag']
 					),
 				);
 
@@ -436,70 +442,6 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 				}
 			}
-
-			// global $typenow, $taxonomies;
-
-			// $count			= 0;
-			// $cpt_slug		= $this->cpt_slug;
-			// $cpt_name		= $this->cpt_name;
-			// $cpt_tax		= $this->cpt_tax;
-			// $hide			= $this->hide;
-
-			// $result			= array();
-
-			// foreach ( $cpt_slug as $key => $value ) {
-
-			// 	$result[$value] = array(
-			// 		'cpt_tax' => $cpt_tax[$key],
-			// 		'hide'    => $hide[$key],
-			// 	);
-
-			// }
-
-			// foreach ( $result as $key => $value ) {
-
-			// 	if ( $key == $typenow ) {
-
-			// 		foreach ( $result[$key] as $tax  ) {
-
-			// 			if ( is_array($tax) )
-
-			// 			foreach ( $tax as $key => $value ) {
-
-			// 				if ( $value ) {
-
-			// 					$termSlug = preg_replace( "/\W/", "_", strtolower($value) );
-
-			// 					$current_tax = isset( $_GET[$termSlug] ) ? $_GET[$termSlug] : false;
-
-			// 					$termArgs = array(
-			// 						'hide_empty' => 0,
-			// 						'post_type'  => $typenow,
-			// 					);
-
-			// 					$terms = get_terms($termSlug, $termArgs);
-
-			// 					if ( count( $terms ) > 0 ) {
-
-			// 						echo "<select name='".$termSlug."' id='".$termSlug."' class='postform'>";
-			// 						echo "<option value=''>View all ".$value."</option>";
-
-			// 						foreach ( $terms as $term ) {
-			// 							echo '<option value=' . $term->slug, $current_tax == $term->slug ? ' selected="selected"' : '','>' . $term->name .' (' . $term->count .')</option>';
-			// 						}
-
-			// 						echo "</select>";
-			// 					}
-
-			// 				}
-
-			// 			}
-
-			// 		}
-
-			// 	}
-
-			// }
 
 		}
 
