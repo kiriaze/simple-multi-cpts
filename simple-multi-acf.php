@@ -50,8 +50,8 @@ register_field_group(
 					],
 					[
 						'key'               => 'field_547383cfc0cbb',
-						'label'             => 'Custom Post Type Name Singular',
-						'name'              => 'cpt_name_singular',
+						'label'             => 'Custom Post Type Name Plural',
+						'name'              => 'cpt_name_plural',
 						'prefix'            => '',
 						'type'              => 'text',
 						'instructions'      => '',
@@ -113,8 +113,8 @@ register_field_group(
 							],
 							[
 								'key'               => 'field_54737c37ad4c8',
-								'label'             => 'Taxonomy Name Singular',
-								'name'              => 'tax_name_singular',
+								'label'             => 'Taxonomy Name Plural',
+								'name'              => 'tax_name_plural',
 								'prefix'            => '',
 								'type'              => 'text',
 								'instructions'      => '',

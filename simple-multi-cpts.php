@@ -51,9 +51,9 @@ function simple_multi_cpts_plugin_init(){
 	$plugin_basename,
 	$cpt_slug,
 	$cpt_name,
-	$cpt_name_singular,
+	$cpt_name_plural,
 	$cpt_tax,
-	$cpt_tax_singular,
+	$cpt_tax_plural,
 	$cats_and_tags,
 	$heirarchial,
 	$has_archive,
@@ -67,17 +67,17 @@ function simple_multi_cpts_plugin_init(){
 	//  Define Globals
 	$plugin_name        =   'Simple Multi CPTS';   // change this - always prefix e.g. Simple Multi CPTS
 
-	// Required: post type plural - e.g. People
+	// Required: post type singular - e.g. Person
 	$cpt_name           =   [];
 
-	// Required: post type singular - e.g. Person
-	$cpt_name_singular  =   [];
-
-	// Optional: post type custom tax plural - e.g. Hobbies
-	$cpt_tax            =   [];
+	// Required: post type plural - e.g. People
+	$cpt_name_plural    =   [];
 
 	// Optional: post type custom tax singular - e.g. Hobby
-	$cpt_tax_singular   =   [];
+	$cpt_tax            =   [];
+
+	// Optional: post type custom tax plural - e.g. Hobbies
+	$cpt_tax_plural     =   [];
 
 	// Optional: post type rewrite slug - e.g. People
 	$rewriteUrl         =   [];
@@ -96,17 +96,17 @@ function simple_multi_cpts_plugin_init(){
 		isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0] )
 		? apply_filters('simple_multi_cpts_plugin_init', $cpt_name)[0]
 		: [];
-	$cpt_name_singular =
-		isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_name_singular)[1] )
-		? apply_filters('simple_multi_cpts_plugin_init', $cpt_name_singular)[1]
+	$cpt_name_plural =
+		isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_name_plural)[1] )
+		? apply_filters('simple_multi_cpts_plugin_init', $cpt_name_plural)[1]
 		: [];
 	$cpt_tax    =
 		isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2] )
 		? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax)[2]
 		: [];
-	$cpt_tax_singular =
-		isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_tax_singular)[3] )
-		? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax_singular)[3]
+	$cpt_tax_plural =
+		isset( apply_filters('simple_multi_cpts_plugin_init', $cpt_tax_plural)[3] )
+		? apply_filters('simple_multi_cpts_plugin_init', $cpt_tax_plural)[3]
 		: [];
 	$rewriteUrl =
 		isset( apply_filters('simple_multi_cpts_plugin_init', $rewriteUrl)[4] )
@@ -136,7 +136,7 @@ function simple_multi_cpts_plugin_init(){
 			while ( has_sub_field('custom_post_type', 'option') ) :
 				
 				$cpt_name[]          = ucfirst( get_sub_field('cpt_name') );
-				$cpt_name_singular[] = ucfirst( get_sub_field('cpt_name_singular') );
+				$cpt_name_plural[]   = ucfirst( get_sub_field('cpt_name_plural') );
 				$rewriteUrl[]        = ucfirst( get_sub_field('rewrite_url') );
 				$cats_and_tags[]     = get_sub_field('enable_cats_tags');
 				$heirarchial[]       = get_sub_field('enable_heirarchial');
@@ -157,7 +157,7 @@ function simple_multi_cpts_plugin_init(){
 				endwhile;
 
 				$cpt_tax[]          = $tax_array;
-				$cpt_tax_singular[] = $tax_single_array;
+				$cpt_tax_plural[]   = $tax_single_array;
 				$hide[]             = $hide_array;
 
 			endwhile;
@@ -179,7 +179,7 @@ function simple_multi_cpts_plugin_init(){
 	// sp($heirarchial);
 	// sp($has_archive);
 	// sp($cpt_name);
-	// sp($cpt_name_singular);
+	// sp($cpt_name_plural);
 	// sp($cpt_tax);
 	// sp($rewriteUrl);
 	// sp($hide);
@@ -190,7 +190,7 @@ function simple_multi_cpts_plugin_init(){
 	// foreach ( $cpt_slug as $key => $value ) {
 
 	//     $result[$value] = array(
-	//         'cpt_name_singular' => $cpt_name_singular[$key],
+	//         'cpt_name_plural' => $cpt_name_plural[$key],
 	//         'rewriteUrl' => $rewriteUrl[$key],
 	//         'cpt_tax'    => $cpt_tax[$key],
 	//         'hide'       => $hide[$key],

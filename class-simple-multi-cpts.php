@@ -22,10 +22,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			//  Grab globals passed from init
 			global
 			$cpt_slug,
-			$cpt_name_singular,
+			$cpt_name_plural,
 			$cpt_name,
 			$cpt_tax,
-			$cpt_tax_singular,
+			$cpt_tax_plural,
 			$cats_and_tags,
 			$heirarchial,
 			$has_archive,
@@ -37,10 +37,10 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 			//  Set them relative to function
 			$this->cpt_slug          = $cpt_slug;
-			$this->cpt_name_singular = $cpt_name_singular;
+			$this->cpt_name_plural   = $cpt_name_plural;
 			$this->cpt_name          = $cpt_name;
 			$this->cpt_tax           = $cpt_tax;
-			$this->cpt_tax_singular  = $cpt_tax_singular;
+			$this->cpt_tax_plural    = $cpt_tax_plural;
 			$this->cats_and_tags     = $cats_and_tags;
 			$this->heirarchial       = $heirarchial;
 			$this->has_archive       = $has_archive;
@@ -123,12 +123,12 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			// Register cpt / tax
 			$count             = 0;
 			$cpt_slug          = $this->cpt_slug;
-			$cpt_name_singular = $this->cpt_name_singular;
 			$cpt_name          = $this->cpt_name;
+			$cpt_name_plural   = $this->cpt_name_plural;
 			$heirarchial       = $this->heirarchial;
 			$has_archive       = $this->has_archive;
 			$cpt_tax           = $this->cpt_tax;
-			$cpt_tax_singular  = $this->cpt_tax_singular;
+			$cpt_tax_plural    = $this->cpt_tax_plural;
 			$hide              = $this->hide;
 			$cpt_supports      = $this->supports;
 			$post_types        = [];
@@ -154,16 +154,16 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 				$post_types[] = array(
 					$value =>  array(
 						'labels'                    => array(
-							'name'                      => __( $cpt_name[$count] ),
-							'singular_name'             => __( $cpt_name_singular[$count] ),
-							'add_new'                   => __( 'Add New ' . $cpt_name_singular[$count] ),
-							'add_new_item'              => __( 'Add New ' . $cpt_name_singular[$count] ),
-							'edit_item'                 => __( 'Edit ' . $cpt_name_singular[$count] ),
-							'new_item'                  => __( 'Add New ' . $cpt_name_singular[$count] ),
-							'view_item'                 => __( 'View ' . $cpt_name_singular[$count] ),
-							'search_items'              => __( 'Search ' . $cpt_name[$count] ),
-							'not_found'                 => __( 'No '. $cpt_name[$count] . ' found' ),
-							'not_found_in_trash'        => __( 'No '. $cpt_name[$count] . ' found in trash' )
+							'name'                      => __( $cpt_name_plural[$count] ),
+							'singular_name'             => __( $cpt_name[$count] ),
+							'add_new'                   => __( 'Add New ' . $cpt_name[$count] ),
+							'add_new_item'              => __( 'Add New ' . $cpt_name[$count] ),
+							'edit_item'                 => __( 'Edit ' . $cpt_name[$count] ),
+							'new_item'                  => __( 'Add New ' . $cpt_name[$count] ),
+							'view_item'                 => __( 'View ' . $cpt_name[$count] ),
+							'search_items'              => __( 'Search ' . $cpt_name_plural[$count] ),
+							'not_found'                 => __( 'No '. $cpt_name_plural[$count] . ' found' ),
+							'not_found_in_trash'        => __( 'No '. $cpt_name_plural[$count] . ' found in trash' )
 						),
 						'public'                    => true,
 						'supports'                  => $cpt_supports[$count],
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 							$label             = preg_replace("/\W/", "_", strtolower($value1) );
 							$tax_name          = ucfirst($value1);
-							$tax_name_singular = ucfirst($cpt_tax_singular[$key1]);
+							$tax_name_singular = ucfirst($cpt_tax_plural[$key1]);
 
 							$custom_tax[] = array(
 								$label    => array(
@@ -251,7 +251,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 								$label             = preg_replace("/\W/", "_", strtolower($value2) );
 								$tax_name          = ucfirst($value2);
-								$tax_name_singular = ucfirst($cpt_tax_singular[$key1][$key]);
+								$tax_name_singular = ucfirst($cpt_tax_plural[$key1][$key]);
 
 								$custom_tax[] = array(
 									$label    => array(
@@ -343,7 +343,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		function add_cpt_columns( $columns ) {
 
 			$cpt_slug          = $this->cpt_slug;
-			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_name_plural   = $this->cpt_name_plural;
 			$cpt_tax           = $this->cpt_tax;
 			$hide              = $this->hide;
 			$cpt_supports      = $this->supports;
@@ -373,7 +373,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 			global $post;
 
 			$cpt_slug          = $this->cpt_slug;
-			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_name_plural   = $this->cpt_name_plural;
 			$cpt_tax           = $this->cpt_tax;
 			$cpt_supports      = $this->supports;
 
@@ -393,7 +393,7 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 		function cpt_column_register_sortable( $columns ) {
 
 			$cpt_slug          = $this->cpt_slug;
-			$cpt_name_singular = $this->cpt_name_singular;
+			$cpt_name_plural   = $this->cpt_name_plural;
 			$cpt_tax           = $this->cpt_tax;
 			$cpt_supports      = $this->supports;
 
