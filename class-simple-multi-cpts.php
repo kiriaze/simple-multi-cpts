@@ -201,31 +201,31 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 
 						if ( !is_array($value1) ) :
 
-							$label             = preg_replace("/\W/", "_", strtolower($value1) );
-							$tax_name          = ucfirst($value1);
-							$tax_name_singular = ucfirst($cpt_tax_plural[$key1]);
+							$label           = preg_replace("/\W/", "_", strtolower($value1) );
+							$tax_name        = ucfirst($value1);
+							$tax_name_plural = ucfirst($cpt_tax_plural[$key1]);
 
 							$custom_tax[] = array(
 								$label    => array(
 									'object_type'                   => $check[$key1],
-									'label'                         => $tax_name,
+									'label'                         => $tax_name_plural,
 									'labels'                        => [
-										'name'                      => $tax_name,
-										'singluar_name'             => $tax_name_singular,
+										'name'                      => $tax_name_plural,
+										'singluar_name'             => $tax_name,
 										
-										'edit_item'                  => 'Edit ' . $tax_name_singular,
-										'update_item'                => 'Update  ' . $tax_name_singular,
-										'add_new_item'               => 'Add New ' . $tax_name_singular,
+										'edit_item'                  => 'Edit ' . $tax_name,
+										'update_item'                => 'Update  ' . $tax_name,
+										'add_new_item'               => 'Add New ' . $tax_name,
 										
-										'new_item_name'              => 'New '. $tax_name_singular .' Name',
-										'menu_name'                  => $tax_name,
-										'search_items'               => 'Search ' . $tax_name,
-										'popular_items'              => 'Popular ' . $tax_name,
-										'all_items'                  => 'All ' . $tax_name,
-										'separate_items_with_commas' => 'Separate '. $tax_name .' with commas',
-										'add_or_remove_items'        => 'Add or remove '. $tax_name .'',
-										'choose_from_most_used'      => 'Choose from the most used '. $tax_name .'',
-										'not_found'                  => 'No '. $tax_name .' found.',
+										'new_item_name'              => 'New '. $tax_name .' Name',
+										'menu_name'                  => $tax_name_plural,
+										'search_items'               => 'Search ' . $tax_name_plural,
+										'popular_items'              => 'Popular ' . $tax_name_plural,
+										'all_items'                  => 'All ' . $tax_name_plural,
+										'separate_items_with_commas' => 'Separate '. $tax_name_plural .' with commas',
+										'add_or_remove_items'        => 'Add or remove '. $tax_name_plural .'',
+										'choose_from_most_used'      => 'Choose from the most used '. $tax_name_plural .'',
+										'not_found'                  => 'No '. $tax_name_plural .' found.',
 									],
 									'public'                        => true,
 									'show_in_nav_menus'             => true,
@@ -250,30 +250,30 @@ if ( ! class_exists( 'Simple_Multi_Cpts_Post_Type' ) ) :
 							foreach ( $value1 as $key => $value2 ) {
 
 								$label             = preg_replace("/\W/", "_", strtolower($value2) );
-								$tax_name          = ucfirst($value2);
-								$tax_name_singular = ucfirst($cpt_tax_plural[$key1][$key]);
+								$tax_name        = ucfirst($value2);
+								$tax_name_plural = ucfirst($cpt_tax_plural[$key1][$key]);
 
 								$custom_tax[] = array(
 									$label    => array(
 										'object_type'                   => $check[$key1],
-										'label'                         => $tax_name,
+										'label'                         => $tax_name_plural,
 										'labels'                        => [
-											'name'                       => $tax_name,
-											'singluar_name'              => $tax_name_singular,
+											'name'                       => $tax_name_plural,
+											'singluar_name'              => $tax_name,
 											
-											'edit_item'                  => 'Edit ' . $tax_name_singular,
-											'update_item'                => 'Update  ' . $tax_name_singular,
-											'add_new_item'               => 'Add New ' . $tax_name_singular,
+											'edit_item'                  => 'Edit ' . $tax_name,
+											'update_item'                => 'Update  ' . $tax_name,
+											'add_new_item'               => 'Add New ' . $tax_name,
 											
-											'new_item_name'              => 'New '. $tax_name_singular .' Name',
-											'menu_name'                  => $tax_name,
-											'search_items'               => 'Search ' . $tax_name,
-											'popular_items'              => 'Popular ' . $tax_name,
-											'all_items'                  => 'All ' . $tax_name,
-											'separate_items_with_commas' => 'Separate '. $tax_name .' with commas',
-											'add_or_remove_items'        => 'Add or remove '. $tax_name .'',
-											'choose_from_most_used'      => 'Choose from the most used '. $tax_name .'',
-											'not_found'                  => 'No '. $tax_name .' found.',
+											'new_item_name'              => 'New '. $tax_name .' Name',
+											'menu_name'                  => $tax_name_plural,
+											'search_items'               => 'Search ' . $tax_name_plural,
+											'popular_items'              => 'Popular ' . $tax_name_plural,
+											'all_items'                  => 'All ' . $tax_name_plural,
+											'separate_items_with_commas' => 'Separate '. $tax_name_plural .' with commas',
+											'add_or_remove_items'        => 'Add or remove '. $tax_name_plural .'',
+											'choose_from_most_used'      => 'Choose from the most used '. $tax_name_plural .'',
+											'not_found'                  => 'No '. $tax_name_plural .' found.',
 										],
 										'public'                        => true,
 										'show_in_nav_menus'             => true,

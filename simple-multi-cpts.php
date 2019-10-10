@@ -145,19 +145,19 @@ function simple_multi_cpts_plugin_init(){
 				$cpt_icon[]          = get_sub_field('cpt_icon') ? get_sub_field('cpt_icon') : '';
 				
 				$tax_array           = [];
-				$tax_single_array    = [];
+				$tax_plural_array    = [];
 				$hide_array          = [];
 
 				while ( has_sub_field('cpt_tax', 'option') ) :
 
 					$tax_array[]        = ucfirst( get_sub_field('tax_name') );
-					$tax_single_array[] = ucfirst( get_sub_field('tax_name_singular') );
+					$tax_plural_array[] = ucfirst( get_sub_field('tax_name_plural') );
 					$hide_array[]       = get_sub_field('hide_tax');
 
 				endwhile;
 
 				$cpt_tax[]          = $tax_array;
-				$cpt_tax_plural[]   = $tax_single_array;
+				$cpt_tax_plural[]   = $tax_plural_array;
 				$hide[]             = $hide_array;
 
 			endwhile;
